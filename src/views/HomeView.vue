@@ -84,7 +84,6 @@ const handleLikeClick = (e) => {
 };
 
 const handleGetClick = (e) => {
-  console.log('handling click');
   getRandomYap();
 };
 </script>

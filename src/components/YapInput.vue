@@ -1,8 +1,7 @@
 <script setup>
 import {defineModel} from 'vue';
 
-const props = defineProps({type: String, name: String, placeholder: String, width: {type: String, default: '24rem'}});
-
+const props = defineProps({type: String, name: String, placeholder: String, width: {type: String, default: '29rem'}});
 const model = defineModel();
 </script>
 

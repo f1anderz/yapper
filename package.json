@@ -11,12 +11,16 @@
   "dependencies": {
     "@vuepic/vue-datepicker": "^8.7.0",
     "axios": "^1.7.2",
+    "pathe": "^1.1.2",
     "pinia": "^2.1.7",
     "sass": "^1.77.2",
     "vue": "^3.4.21",
     "vue-cookies": "^1.8.4",
     "vue-router": "^4.3.2",
-    "vue3-emoji-picker": "^1.1.8"
+    "vue3-emoji-picker": "^1.1.8",
+    "vue3-google-login": "^2.0.26",
+    "vue3-linkedin-login": "^0.1.8",
+    "vue3-login-with-twitter": "^1.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

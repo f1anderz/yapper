@@ -1,6 +1,8 @@
 <script setup>
 import {defineModel, ref} from 'vue';
 
+const props = defineProps({width: {type: String, default: '29rem'}});
+
 const model = defineModel();
 const mode = ref(true);
 </script>
@@ -19,7 +21,7 @@ const mode = ref(true);
 @use '@/assets/scss/mixins';
 
 .yap-password-input {
-  width: 24rem;
+  width: v-bind('props.width');
   display: flex;
   flex-direction: row;
   justify-content: space-between;

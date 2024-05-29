@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const base_url = 'http://localhost:3000/yaps';
+const base_url = 'http://18.130.224.237:3000/yaps';
 
 export default {
     async get_random_yap(yapId) {
