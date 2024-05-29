@@ -28,4 +28,9 @@ router.beforeEach((to, from, next) => {
     if (to.name !== 'Authentication' && !userStore.isAuthenticated) next({name: 'Authentication'}); else next();
 });
 
+router.beforeEach((to, from, next) => {
+    const userStore = useUserStore();
+    if(to.name === 'Authentication' && userStore.isAuthenticated) next({name: 'Home'}); else next();
+});
+
 export default router;
