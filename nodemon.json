@@ -1,0 +1,6 @@
+{
+  "env": {
+    "MONGO_ATLAS_PW": "uyCrkm0sroTp5lCE",
+    "PORT": 3000
+  }
+}
