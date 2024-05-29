@@ -42,27 +42,42 @@ exports.users_register = (req, res) => {
                         message: 'Nickname exists'
                     });
                 } else {
-                    bcrypt.hash(req.body.password, 10, (err, hash) => {
-                        if (err) {
-                            return res.status(500).json({
+                    if (req.body.googleId) {
+                        const user = new User({
+                            _id: new mongoose.Types.ObjectId,
+                            googleId: req.body.googleId,
+                            nickname: req.body.nickname
+                        });
+                        user.save().then(result => {
+                            res.status(201).json({status: true, user: result});
+                        }).catch(err => {
+                            res.status(500).json({
                                 error: err
                             });
-                        } else {
-                            const user = new User({
-                                _id: new mongoose.Types.ObjectId,
-                                login: req.body.login,
-                                password: hash,
-                                nickname: req.body.nickname
-                            });
-                            user.save().then(result => {
-                                res.status(201).json({status: true, user: result});
-                            }).catch(err => {
-                                res.status(500).json({
+                        });
+                    } else {
+                        bcrypt.hash(req.body.password, 10, (err, hash) => {
+                            if (err) {
+                                return res.status(500).json({
                                     error: err
                                 });
-                            });
-                        }
-                    });
+                            } else {
+                                const user = new User({
+                                    _id: new mongoose.Types.ObjectId,
+                                    login: req.body.login,
+                                    password: hash,
+                                    nickname: req.body.nickname
+                                });
+                                user.save().then(result => {
+                                    res.status(201).json({status: true, user: result});
+                                }).catch(err => {
+                                    res.status(500).json({
+                                        error: err
+                                    });
+                                });
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -74,28 +89,45 @@ exports.users_register = (req, res) => {
 };
 
 exports.users_login = (req, res) => {
-    User.findOne({login: req.body.login}).exec().then(user => {
-        if (user) {
-            bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if (result) {
-                    res.status(200).json({
-                        status: true, user: user
-                    });
-
-                } else {
-                    res.status(401).json({
-                        message: 'Auth failed'
-                    });
-                }
-            });
-        } else {
-            res.status(401).json({
+    if (req.body.googleId) {
+        User.findOne({googleId: req.body.googleId.toString()}).exec().then(user => {
+            if (user) {
+                res.status(200).json({
+                    status: true, user: user
+                });
+            } else {
+                res.status(401).json({
                     message: 'Auth failed'
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                error: err
             });
-        }
-    }).catch(err => {
-        res.status(500).json({
-            error: err
         });
-    });
+    } else {
+        User.findOne({login: req.body.login}).exec().then(user => {
+            if (user) {
+                bcrypt.compare(req.body.password, user.password, (err, result) => {
+                    if (result) {
+                        res.status(200).json({
+                            status: true, user: user
+                        });
+                    } else {
+                        res.status(401).json({
+                            message: 'Auth failed'
+                        });
+                    }
+                });
+            } else {
+                res.status(401).json({
+                    message: 'Auth failed'
+                });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+    }
 };
