@@ -4,7 +4,7 @@ const Yap = require('../models/yap');
 const User = require('../models/user');
 
 exports.get_all_yaps = (req, res) => {
-    Yap.find().exec().then(yaps => {
+    Yap.find().sort({likes: 'desc'}).exec().then(yaps => {
         yaps = yaps.filter(y => {
             return y.deathTime !== null && y.deathTime > new Date() || y.deathTime === null;
         });
@@ -35,7 +35,7 @@ exports.get_yap = (req, res) => {
 };
 
 exports.get_victim_yaps = (req, res) => {
-    Yap.find({victim: req.params.userId}).populate('victim').exec().then(yaps => {
+    Yap.find({victim: req.params.userId}).sort({likes: 'desc'}).populate('victim').exec().then(yaps => {
         yaps = yaps.filter(y => {
             return y.deathTime !== null && y.deathTime > new Date() || y.deathTime === null;
         });
@@ -48,7 +48,7 @@ exports.get_victim_yaps = (req, res) => {
 };
 
 exports.get_author_yaps = (req, res) => {
-    Yap.find({author: req.params.userId}).populate('victim').exec().then(yaps => {
+    Yap.find({author: req.params.userId}).sort({likes: 'desc'}).populate('victim').exec().then(yaps => {
         yaps = yaps.filter(y => {
             return y.deathTime !== null && y.deathTime > new Date() || y.deathTime === null;
         });

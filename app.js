@@ -9,7 +9,8 @@ const app = express();
 const userRoutes = require('./api/routes/user');
 const yapRoutes = require('./api/routes/yap');
 
-mongoose.connect('mongodb+srv://f1anderz:' + process.env.MONGO_ATLAS_PW + '@f1anderz.9iuijm1.mongodb.net/yapper?retryWrites=true&w=majority&appName=f1anderz');
+
+mongoose.connect('mongodb+srv://oleksiikovtun:' + process.env.MONGO_ATLAS_PW + '@oleksii.uu1swdn.mongodb.net/yapper?retryWrites=true&w=majority&appName=Oleksii');
 
 app.use(cors());
 app.use(morgan('dev'));
