@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const axios = require('axios');
 
 const User = require('../models/user');
 
@@ -130,4 +131,18 @@ exports.users_login = (req, res) => {
             });
         });
     }
+};
+
+exports.github_login = (req, res) => {
+    axios.post('https://github.com/login/oauth/authorize?client_id=Ov23liZgy8WG8x14pglV', {
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+    }).then(response => {
+        console.log(response);
+        res.status(200).json({msg: 'res'});
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    });
 };
