@@ -145,7 +145,7 @@ exports.users_auth = (req, res) => {
             });
         });
     } else if (req.body.gitHubId) {
-        User.findOne({gitHub: req.body.gitHub}).exec().then(user => {
+        User.findOne({gitHub: req.body.gitHubId}).exec().then(user => {
             if (user) {
                 res.status(200).json({
                     status: true, user: user
