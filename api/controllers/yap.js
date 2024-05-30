@@ -135,5 +135,11 @@ exports.like_yap = (req, res) => {
 };
 
 exports.delete_yap = (req, res) => {
-
+    Yap.deleteOne({_id: req.params.id}).exec().then(() => {
+        res.status(200).json({status: true, message: 'Deleted'});
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
 };

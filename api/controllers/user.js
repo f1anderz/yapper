@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const axios = require('axios');
 
 const User = require('../models/user');
+const {Mongoose} = require('mongoose');
+const axios = require('axios');
 
 exports.get_users = (req, res) => {
     User.find({}).exec().then(users => {
@@ -43,42 +44,28 @@ exports.users_register = (req, res) => {
                         message: 'Nickname exists'
                     });
                 } else {
-                    if (req.body.googleId) {
-                        const user = new User({
-                            _id: new mongoose.Types.ObjectId,
-                            googleId: req.body.googleId,
-                            nickname: req.body.nickname
-                        });
-                        user.save().then(result => {
-                            res.status(201).json({status: true, user: result});
-                        }).catch(err => {
-                            res.status(500).json({
+                    bcrypt.hash(req.body.password, 10, (err, hash) => {
+                        if (err) {
+                            return res.status(500).json({
                                 error: err
                             });
-                        });
-                    } else {
-                        bcrypt.hash(req.body.password, 10, (err, hash) => {
-                            if (err) {
-                                return res.status(500).json({
+                        } else {
+                            const user = new User({
+                                _id: new mongoose.Types.ObjectId,
+                                login: req.body.login,
+                                password: hash,
+                                nickname: req.body.nickname
+                            });
+                            user.save().then(result => {
+                                res.status(201).json({status: true, user: result});
+                            }).catch(err => {
+                                res.status(500).json({
                                     error: err
                                 });
-                            } else {
-                                const user = new User({
-                                    _id: new mongoose.Types.ObjectId,
-                                    login: req.body.login,
-                                    password: hash,
-                                    nickname: req.body.nickname
-                                });
-                                user.save().then(result => {
-                                    res.status(201).json({status: true, user: result});
-                                }).catch(err => {
-                                    res.status(500).json({
-                                        error: err
-                                    });
-                                });
-                            }
-                        });
-                    }
+                            });
+                        }
+                    });
+
                 }
             });
         }
@@ -90,6 +77,33 @@ exports.users_register = (req, res) => {
 };
 
 exports.users_login = (req, res) => {
+    User.findOne({login: req.body.login}).exec().then(user => {
+        if (user) {
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if (result) {
+                    res.status(200).json({
+                        status: true, user: user
+                    });
+                } else {
+                    res.status(401).json({
+                        message: 'Auth failed'
+                    });
+                }
+            });
+        } else {
+            res.status(401).json({
+                message: 'Auth failed'
+            });
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+
+};
+
+exports.users_auth = (req, res) => {
     if (req.body.googleId) {
         User.findOne({googleId: req.body.googleId.toString()}).exec().then(user => {
             if (user) {
@@ -97,8 +111,31 @@ exports.users_login = (req, res) => {
                     status: true, user: user
                 });
             } else {
-                res.status(401).json({
-                    message: 'Auth failed'
+                User.findOne({nickname: req.body.nickname}).exec().then(result => {
+                    if (result) {
+                        return res.status(409).json({
+                            message: 'Nickname exists'
+                        });
+                    } else {
+                        const newUser = User({
+                            _id: new mongoose.Types.ObjectId,
+                            nickname: req.body.nickname,
+                            googleId: req.body.googleId
+                        });
+                        newUser.save().then(newUser => {
+                            res.status(201).json({
+                                status: true, user: newUser
+                            });
+                        }).catch(err => {
+                            res.status(500).json({
+                                error: err
+                            });
+                        });
+                    }
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    });
                 });
             }
         }).catch(err => {
@@ -106,23 +143,38 @@ exports.users_login = (req, res) => {
                 error: err
             });
         });
-    } else {
-        User.findOne({login: req.body.login}).exec().then(user => {
+    } else if (req.body.gitHubId) {
+        User.findOne({gitHubId: req.body.gitHubId}).exec().then(user => {
             if (user) {
-                bcrypt.compare(req.body.password, user.password, (err, result) => {
-                    if (result) {
-                        res.status(200).json({
-                            status: true, user: user
-                        });
-                    } else {
-                        res.status(401).json({
-                            message: 'Auth failed'
-                        });
-                    }
+                res.status(200).json({
+                    status: true, user: user
                 });
             } else {
-                res.status(401).json({
-                    message: 'Auth failed'
+                User.findOne({nickname: req.body.nickname}).exec().then(result => {
+                    if (result) {
+                        return res.status(409).json({
+                            message: 'Nickname exists'
+                        });
+                    } else {
+                        const newUser = User({
+                            _id: new mongoose.Types.ObjectId,
+                            nickname: req.body.nickname,
+                            gitHubId: req.body.gitHubId
+                        });
+                        newUser.save().then(newUser => {
+                            res.status(201).json({
+                                status: true, user: newUser
+                            });
+                        }).catch(err => {
+                            res.status(500).json({
+                                error: err
+                            });
+                        });
+                    }
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    });
                 });
             }
         }).catch(err => {
@@ -133,16 +185,25 @@ exports.users_login = (req, res) => {
     }
 };
 
-exports.github_login = (req, res) => {
-    axios.post('https://github.com/login/oauth/authorize?client_id=Ov23liZgy8WG8x14pglV', {
+exports.github_get_token = (req, res) => {
+    const params = '?client_id=' + process.env.GITHUB_CLIENT_ID + '&client_secret=' + process.env.GITHUB_CLIENT_SECRET + '&code=' + req.query.code;
+    axios.post('https://github.com/login/oauth/access_token' + params, {}, {
+        headers: {'Accept': 'application/json'}
+    }).then(response => {
+        res.status(200).json(response.data);
+    }).catch(err => {
+        res.status(500).json(err);
+    });
+};
+
+exports.github_get_user_data = (req, res) => {
+    axios.get('https://api.github.com/user', {
         headers: {
-            'Access-Control-Allow-Origin': '*'
+            'Authorization': 'Bearer ' + req.query.token
         }
     }).then(response => {
-        console.log(response);
-        res.status(200).json({msg: 'res'});
+        res.status(200).json(response.data);
     }).catch(err => {
-        console.log(err);
         res.status(500).json(err);
     });
 };
