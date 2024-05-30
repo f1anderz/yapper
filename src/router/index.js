@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to, from, next) => {
     const userStore = useUserStore();
-    if(to.name === 'Authentication' && userStore.isAuthenticated) next({name: 'Home'}); else next();
+    if (to.name === 'Authentication' && userStore.isAuthenticated) next({name: 'Home'}); else next();
 });
 
 export default router;

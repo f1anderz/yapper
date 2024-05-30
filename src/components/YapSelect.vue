@@ -1,6 +1,6 @@
 <template>
   <div class="yap-select">
-    <yap-input v-model="searchString" placeholder="Search victims" name="select-search" width="12rem"/>
+    <yap-input v-model="searchString" placeholder="Search victims" name="select-search" width="16rem"/>
     <div v-if="searchActive" class="yap-select-list">
       <transition-group name="select-list">
         <div v-for="option in searchedOptions" :key="option._id" @click="handleOptionClick"
@@ -67,11 +67,10 @@ watch(toRef(() => props.clear), (newClear, oldClear) => {
     top: 2.2rem;
     left: .5rem;
     padding: .3rem 0;
-    background: variables.$secondary-background-color;
     font: 1rem variables.$font-body;
     color: variables.$text-color;
-    border: .01rem solid variables.$text-color;
-    border-radius: .3rem;
+    box-shadow: -1px 0px 23px 0px rgba(47, 47, 47, 0.45);
+    background: variables.$secondary-background-color;
     max-height: 12rem;
     overflow-y: scroll;
 

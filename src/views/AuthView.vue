@@ -17,7 +17,7 @@
         <div class="yapper-auth-form-third-party-title"><span>Or</span></div>
         <div class="yapper-auth-form-third-party-buttons">
           <google-login :callback="handleGoogleLogin"/>
-<!--          <div @click="linkedInLogin">Login with LinkedIn</div>-->
+          <div @click="handleGitHubClick" class="yapper-auth-form-third-party-buttons-github">Login with github</div>
         </div>
       </div>
       <div class="yapper-auth-form-mode" v-if="mode">Don`t have an account?
@@ -31,63 +31,38 @@
 </template>
 
 <script setup>
-import {defineModel, inject, onMounted, ref} from 'vue';
+import {defineModel, inject, ref, watch} from 'vue';
 import YapButton from '@/components/YapButton.vue';
 import YapInput from '@/components/YapInput.vue';
 import YapPasswordInput from '@/components/YapPasswordInput.vue';
 import userAPI from '@/api/user.js';
 import {useUserStore} from '@/stores/user.js';
-import {useRouter} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {decodeCredential, GoogleLogin} from 'vue3-google-login';
-import {LinkedInCallback, useLinkedIn} from 'vue3-linkedin-login';
 
 const cookies = inject('$cookies');
 const router = useRouter();
+const route = useRoute();
 
 const userStore = useUserStore();
 
+const CLIENT_ID = 'Ov23liZgy8WG8x14pglV';
+
 const mode = ref(true);
 const error = ref('');
+const userData = ref({});
 const login = defineModel('login', {default: ''});
 const password = defineModel('password', {default: ''});
 const nickname = defineModel('nickname', {default: ''});
 
-const {linkedInLogin, exchangeCodeForToken, getAccount, getMail} =
-    useLinkedIn({
-      clientId: '77ankc4o6irl0d',
-      clientSecret: 'WPL_AP0.mD2ne6HniTGFkeoD.ODU4NzU5MDMw',
-      redirectUri: 'http://localhost:5173/auth/linkedin',
-      onSuccess: async (code) => {
-        const exchangeCode = await exchangeCodeForToken(code);
-        const account = await getAccount(exchangeCode.access_token);
-        const email = await getMail(exchangeCode.access_token);
-
-        if (!account || !email) {
-          return;
-        }
-
-        const firstName = account.localizedFirstName;
-        const lastName = account.localizedLastName;
-        const emailAddress = email.elements[0]['handle~'].emailAddress;
-
-        const user = {
-          firstName,
-          lastName,
-          emailAddress,
-        };
-
-        console.log(user);
-      },
-      scope: 'r_emailaddress,r_liteprofile',
-      onError: (error) => {
-        console.log(error);
-      },
-    });
-
-onMounted(() => {
-  LinkedInCallback();
-});
-
+if (route.query.code) {
+  const {code} = route.query;
+  userAPI.github_get_token(code).then(response => {
+    userAPI.github_get_user_data(response.data.access_token).then(response => {
+      userData.value = response.data;
+    }).catch(err => console.log(err));
+  }).catch(err => console.log(err));
+}
 
 const handleAuthClick = () => {
   if (login.value.length > 0 && password.value.length > 0) {
@@ -103,6 +78,7 @@ const handleAuthClick = () => {
       }).catch(err => error.value = err.response.data.message);
     } else {
       if (nickname.value.length > 0) {
+        const compiledNickname = nickname.value.replace(/ /g, '.').toLowerCase();
         userAPI.register({login: login.value, nickname: compiledNickname, password: password.value}).then(response => {
           if (response.data.status) {
             error.value = '';
@@ -121,34 +97,43 @@ const handleAuthClick = () => {
   }
 };
 
+const handleGitHubClick = () => {
+  window.location.assign('https://github.com/login/oauth/authorize?client_id=' + CLIENT_ID);
+};
+
 const handleGoogleLogin = (e) => {
   const userInfo = decodeCredential(e.credential);
-  if (mode.value) {
-    userAPI.google_login({googleId: userInfo.sub}).then(response => {
-      if (response.data.status) {
-        error.value = '';
-        cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
-        userStore._id = response.data.user._id;
-        userStore.nickname = response.data.user.nickname;
-        router.push('/');
-      }
-    }).catch(err => error.value = err.response.data.message);
-  } else {
-    const compiledNickname = userInfo.name.replace(/ /g, '.').toLowerCase();
-    userAPI.google_register({
-      nickname: compiledNickname,
-      sub: userInfo.sub
-    }).then(response => {
-      if (response.data.status) {
-        error.value = '';
-        cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
-        userStore._id = response.data.user._id;
-        userStore.nickname = response.data.user.nickname;
-        router.push('/');
-      }
-    }).catch(err => error.value = err.response.data.message);
-  }
+  const compiledNickname = userInfo.name.replace(/ /g, '.').toLowerCase();
+  userAPI.google_auth({
+    nickname: compiledNickname,
+    sub: userInfo.sub
+  }).then(response => {
+    if (response.data.status) {
+      error.value = '';
+      cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
+      userStore._id = response.data.user._id;
+      userStore.nickname = response.data.user.nickname;
+      router.push('/');
+    }
+  }).catch(err => error.value = err.response.data.message);
 };
+
+watch(userData, () => {
+  console.log(userData);
+  const compiledNickname = userData.value.name.replace(/ /g, '.').toLowerCase();
+  userAPI.github_auth({
+    nickname: compiledNickname,
+    gitHubId: userData.value.id
+  }).then(response => {
+    if (response.data.status) {
+      error.value = '';
+      cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
+      userStore._id = response.data.user._id;
+      userStore.nickname = response.data.user.nickname;
+      router.push('/');
+    }
+  }).catch(err => console.log(err));
+});
 </script>
 
 <style scoped lang="scss">

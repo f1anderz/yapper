@@ -8,22 +8,26 @@
     </div>
     <div class="yap-create-controls">
       <div class="yap-create-controls-switches">
-        <img @click="emojiPickerVisible = !emojiPickerVisible" src="@/assets/img/icons/emoji.svg"
-             alt="Emoji" class="yap-create-controls-switches-emoji">
-        <img @click="datePickerVisible = !datePickerVisible" src="@/assets/img/icons/calendar.svg" alt="Specify date"
-             class="yap-create-controls-switches-date">
+        <div v-click-outside="() => {emojiPickerVisible = false}" class="yap-create-controls-switches-emoji">
+          <img @click="emojiPickerVisible = !emojiPickerVisible" src="@/assets/img/icons/emoji.svg"
+               alt="Emoji">
+          <EmojiPicker v-if="emojiPickerVisible" class="yap-create-controls-switches-emoji-select" :native="true"
+                       :display-recent="true" :disable-skin-tones="true" @select="onSelectEmoji" :hide-search="true"/>
+        </div>
+        <div v-click-outside="() => datePickerVisible = false" class="yap-create-controls-switches-date">
+          <img @click="datePickerVisible = !datePickerVisible" src="@/assets/img/icons/calendar.svg"
+               alt="Emoji">
+          <VueDatePicker v-if="datePickerVisible" class="yap-create-controls-switches-date-select" :inline="true"
+                         :min-date="new Date()" :auto-apply="true" v-model="deathTime"/>
+        </div>
       </div>
       <yap-button @click="handleYapClick">Yap</yap-button>
-      <EmojiPicker v-if="emojiPickerVisible" class="yap-create-controls-emoji-select" :native="true"
-                   :disable-skin-tones="true" @select="onSelectEmoji"/>
-      <VueDatePicker v-if="datePickerVisible"
-                     class="yap-create-controls-date-picker" v-model="deathTime"/>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import EmojiPicker from 'vue3-emoji-picker';
 import YapInput from '@/components/YapInput.vue';
 import YapButton from '@/components/YapButton.vue';
@@ -55,6 +59,9 @@ const onVictimSelect = (e) => {
 
 const handleYapClick = () => {
   if (victim.value.length > 0 && body.value.length > 0) {
+    if (deathTime.value === null) {
+      deathTime.value = new Date(new Date().setMonth(new Date().getMonth() + 1));
+    }
     yapAPI.post_yap({
       author: userStore._id,
       victim: victim.value,
@@ -67,13 +74,16 @@ const handleYapClick = () => {
       body.value = '';
       deathTime.value = null;
       emojiPickerVisible.value = false;
-      datePickerVisible.value = false;
       emit('yapped');
     }).catch(err => error.value = err.response.data.message);
   } else {
     error.value = 'Victim and some yap are required';
   }
 };
+
+watch(deathTime, () => {
+  datePickerVisible.value = false;
+});
 </script>
 
 <style scoped lang="scss">
@@ -84,6 +94,7 @@ const handleYapClick = () => {
   padding: 1rem 1rem;
   display: flex;
   flex-direction: column;
+  gap: .5rem;
 
   &-error {
     padding-left: .75rem;
@@ -92,7 +103,6 @@ const handleYapClick = () => {
   }
 
   &-controls {
-    position: relative;
     padding: 0 1rem;
     display: flex;
     flex-direction: row;
@@ -100,38 +110,36 @@ const handleYapClick = () => {
     align-items: center;
 
     &-switches {
+      position: relative;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
-      gap: 4rem;
+      gap: 5rem;
 
       &-emoji, &-date {
-        width: 1rem;
-        height: 1rem;
+        position: relative;
 
-        @include mixins.breakpoint(xxl) {
-          &:hover {
-            cursor: pointer;
+        & img {
+          width: 1rem;
+          height: 1rem;
+
+          @include mixins.breakpoint(xxl) {
+            &:hover {
+              cursor: pointer;
+            }
           }
+        }
+
+        &-select {
+          font-family: variables.$font-body;
+          position: absolute;
+          top: 2.2rem;
+
         }
       }
     }
-
-    &-emoji-select {
-      font: 1rem variables.$font-body;
-      position: absolute;
-      top: 2.2rem;
-      left: 0;
-    }
-
-    &-date-picker {
-      width: 14rem;
-      font: 1rem variables.$font-body;
-      position: absolute;
-      top: 2.2rem;
-      left: 0;
-    }
   }
+
 }
 </style>

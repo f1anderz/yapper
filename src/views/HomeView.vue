@@ -1,4 +1,5 @@
 <template>
+  <yap-message-box :visible="visible">{{ message }}</yap-message-box>
   <div class="yapper-home">
     <div class="yapper-home-random">
       <yap-card v-if="yap._id" :yap="yap" @like-click="handleLikeClick"/>
@@ -6,7 +7,7 @@
       <yap-button class="yapper-home-random-button" @click="handleGetClick">Get new yap</yap-button>
     </div>
     <div class="yapper-home-create">
-      <yap-create @yapped="getData"/>
+      <yap-create @yapped="handleYapClick"/>
     </div>
     <div class="yapper-home-feed">
       <div v-if="yaps.length > 0" class="yapper-home-feed-title">Oops! Someone yapped you</div>
@@ -28,10 +29,13 @@ import {useUserStore} from '@/stores/user.js';
 import YapCreate from '@/components/YapCreate.vue';
 import YapList from '@/components/YapList.vue';
 import YapButton from '@/components/YapButton.vue';
+import YapMessageBox from '@/components/YapMessageBox.vue';
 
 const userStore = useUserStore();
 
 const yap = ref({});
+const visible = ref(false);
+const message = ref(' ');
 let yapId = '6655fbc4c25b2037aa2b96d7';
 const yaps = ref([]);
 const loadingRandom = ref('Searching for best yap');
@@ -42,8 +46,7 @@ const getRandomYap = () => {
     yap.value = response.data;
     yapId = response.data._id;
   }).catch(err => {
-    loadingRandom.value = 'No yaps found';
-    console.log(err);
+    loadingRandom.value = err.response.data.message;
   });
 };
 
@@ -85,6 +88,15 @@ const handleLikeClick = (e) => {
 
 const handleGetClick = (e) => {
   getRandomYap();
+};
+
+const handleYapClick = (e) => {
+  getData();
+  message.value = 'Yapped!';
+  visible.value = true;
+  setTimeout(() => {
+    visible.value = false;
+  }, 750);
 };
 </script>
 
