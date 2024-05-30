@@ -58,7 +58,6 @@ exports.users_register = (req, res) => {
                             user.save().then(result => {
                                 res.status(201).json({status: true, user: result});
                             }).catch(err => {
-                                console.log(err)
                                 res.status(500).json({
                                     error: err
                                 });
@@ -105,7 +104,7 @@ exports.users_login = (req, res) => {
 
 exports.users_auth = (req, res) => {
     if (req.body.googleId) {
-        User.findOne({googleId: req.body.googleId.toString()}).exec().then(user => {
+        User.findOne({google: req.body.googleId.toString()}).exec().then(user => {
             if (user) {
                 res.status(200).json({
                     status: true, user: user
@@ -120,7 +119,7 @@ exports.users_auth = (req, res) => {
                         const newUser = User({
                             _id: new mongoose.Types.ObjectId,
                             nickname: req.body.nickname,
-                            googleId: req.body.googleId
+                            google: req.body.googleId
                         });
                         newUser.save().then(newUser => {
                             res.status(201).json({
@@ -144,7 +143,7 @@ exports.users_auth = (req, res) => {
             });
         });
     } else if (req.body.gitHubId) {
-        User.findOne({gitHubId: req.body.gitHubId}).exec().then(user => {
+        User.findOne({gitHub: req.body.gitHub}).exec().then(user => {
             if (user) {
                 res.status(200).json({
                     status: true, user: user
@@ -159,7 +158,7 @@ exports.users_auth = (req, res) => {
                         const newUser = User({
                             _id: new mongoose.Types.ObjectId,
                             nickname: req.body.nickname,
-                            gitHubId: req.body.gitHubId
+                            gitHub: req.body.gitHubId
                         });
                         newUser.save().then(newUser => {
                             res.status(201).json({

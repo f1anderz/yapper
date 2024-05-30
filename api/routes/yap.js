@@ -18,6 +18,6 @@ router.patch('/like/:id', yapController.like_yap);
 
 router.patch('/:id', yapController.modify_yap);
 
-router.delete('/', yapController.delete_yap);
+router.delete('/:id', yapController.delete_yap);
 
 module.exports = router;
