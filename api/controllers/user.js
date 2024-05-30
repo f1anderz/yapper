@@ -194,6 +194,7 @@ exports.github_get_token = (req, res) => {
     }).then(response => {
         res.status(200).json(response.data);
     }).catch(err => {
+        console.log(err)
         res.status(500).json(err);
     });
 };
@@ -206,6 +207,7 @@ exports.github_get_user_data = (req, res) => {
     }).then(response => {
         res.status(200).json(response.data);
     }).catch(err => {
+        console.log(err)
         res.status(500).json(err);
     });
 };
