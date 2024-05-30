@@ -118,6 +118,7 @@ exports.users_auth = (req, res) => {
                     } else {
                         const newUser = User({
                             _id: new mongoose.Types.ObjectId,
+                            login: req.body.nickname,
                             nickname: req.body.nickname,
                             google: req.body.googleId
                         });
@@ -126,6 +127,7 @@ exports.users_auth = (req, res) => {
                                 status: true, user: newUser
                             });
                         }).catch(err => {
+                            console.log(err)
                             res.status(500).json({
                                 error: err
                             });
@@ -158,6 +160,7 @@ exports.users_auth = (req, res) => {
                         const newUser = User({
                             _id: new mongoose.Types.ObjectId,
                             nickname: req.body.nickname,
+                            login: req.body.nickname,
                             gitHub: req.body.gitHubId
                         });
                         newUser.save().then(newUser => {
