@@ -8,9 +8,9 @@ const userSchema = mongoose.Schema({
     }, nickname: {
         type: String, required: true, unique: true
     }, googleId: {
-        type: String, required: false, unique: true
+        type: String, required: false
     }, gitHubId: {
-        type: String, required: false, unique: true
+        type: String, required: false
     }
 });
 

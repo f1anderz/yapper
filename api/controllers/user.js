@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
-const {Mongoose} = require('mongoose');
 const axios = require('axios');
 
 exports.get_users = (req, res) => {
@@ -59,6 +58,7 @@ exports.users_register = (req, res) => {
                             user.save().then(result => {
                                 res.status(201).json({status: true, user: result});
                             }).catch(err => {
+                                console.log(err)
                                 res.status(500).json({
                                     error: err
                                 });
