@@ -53,14 +53,13 @@ const getRandomYap = () => {
 const getYap = () => {
   yapAPI.get_yap(yapId).then(response => {
     yap.value = response.data;
-  }).catch(err => {
+  }).catch(() => {
     loadingRandom.value = 'No yaps found';
-    console.log(err);
   });
 };
 
 const getYaps = () => {
-  yapAPI.get_victim_yap({userId: userStore._id}).then(response => {
+  yapAPI.get_victim_yap({userId: userStore.user._id}).then(response => {
     if (response.data.length > 0) {
       yaps.value = response.data;
     } else {
@@ -81,16 +80,16 @@ const getData = () => {
 };
 
 const handleLikeClick = (e) => {
-  yapAPI.trigger_like({yapId: e, userId: userStore._id}).then(() => {
+  yapAPI.trigger_like({yapId: e, userId: userStore.user._id}).then(() => {
     getData();
   }).catch(err => console.log(err));
 };
 
-const handleGetClick = (e) => {
+const handleGetClick = () => {
   getRandomYap();
 };
 
-const handleYapClick = (e) => {
+const handleYapClick = () => {
   getData();
   message.value = 'Yapped!';
   visible.value = true;

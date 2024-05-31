@@ -3,7 +3,7 @@
     <div class="yap-card-victim">{{ props.yap.victim.nickname }} got yapped:</div>
     <div class="yap-card-body">{{ props.yap.body }}</div>
     <div class="yap-card-likes">
-      <img v-if="!userLiked" @click="emit('likeClick', props.yap._id)" src="@/assets/img/icons/heart.svg" alt="Likes">
+      <img v-if="userLiked" @click="emit('likeClick', props.yap._id)" src="@/assets/img/icons/heart.svg" alt="Likes">
       <img v-else @click="emit('likeClick', props.yap._id)" src="@/assets/img/icons/heart_full.svg" alt="Likes">
       {{ props.yap.likes }}
     </div>
@@ -20,7 +20,7 @@ const props = defineProps({yap: {type: Object, required: true}, enable_controls:
 const emit = defineEmits(['likeClick']);
 
 const userLiked = computed(() => {
-  return props.yap.liked.includes(userStore._id);
+  return !props.yap.liked.includes(userStore.user._id);
 });
 
 </script>

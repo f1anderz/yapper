@@ -22,8 +22,7 @@ router.beforeEach((to, from, next) => {
     const userStore = useUserStore();
     const cookies = inject('$cookies');
     if (cookies.isKey('user')) {
-        userStore._id = cookies.get('user')._id;
-        userStore.nickname = cookies.get('user').nickname;
+        userStore.user = cookies.get('user');
     }
     if (to.name !== 'Authentication' && !userStore.isAuthenticated) next({name: 'Authentication'}); else next();
 });

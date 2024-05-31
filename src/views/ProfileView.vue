@@ -16,8 +16,7 @@ const userStore = useUserStore();
 
 const handleLogout = async () => {
   cookies.remove('user');
-  userStore._id = null;
-  userStore.nickname = null;
+  userStore.user = null;
   await router.push('/');
 };
 </script>

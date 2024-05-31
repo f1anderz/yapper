@@ -66,15 +66,22 @@ if (route.query.code) {
   }).catch(err => console.log(err));
 }
 
+const setUser = (user) => {
+  cookies.set('user', user);
+  userStore.user = user;
+};
+
 const handleAuthClick = () => {
   if (login.value.length > 0 && password.value.length > 0) {
     if (mode.value) {
       userAPI.login({login: login.value, password: password.value}).then(response => {
         if (response.data.status) {
           error.value = '';
-          cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
-          userStore._id = response.data.user._id;
-          userStore.nickname = response.data.user.nickname;
+          setUser({
+            _id: response.data.user._id,
+            login: response.data.user.login,
+            nickname: response.data.user.nickname
+          });
           router.push('/');
         }
       }).catch(err => error.value = err.response.data.message);
@@ -84,9 +91,11 @@ const handleAuthClick = () => {
         userAPI.register({login: login.value, nickname: compiledNickname, password: password.value}).then(response => {
           if (response.data.status) {
             error.value = '';
-            cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
-            userStore._id = response.data.user._id;
-            userStore.nickname = response.data.user.nickname;
+            setUser({
+              _id: response.data.user._id,
+              login: response.data.user.login,
+              nickname: response.data.user.nickname
+            });
             router.push('/');
           }
         }).catch(err => error.value = err.response.data.message);
@@ -112,9 +121,11 @@ const handleGoogleLogin = (e) => {
   }).then(response => {
     if (response.data.status) {
       error.value = '';
-      cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
-      userStore._id = response.data.user._id;
-      userStore.nickname = response.data.user.nickname;
+      setUser({
+        _id: response.data.user._id,
+        login: response.data.user.login,
+        nickname: response.data.user.nickname
+      });
       router.push('/');
     }
   }).catch(err => error.value = err.response.data.message);
@@ -129,9 +140,11 @@ watch(userData, () => {
   }).then(response => {
     if (response.data.status) {
       error.value = '';
-      cookies.set('user', {_id: response.data.user._id, nickname: response.data.user.nickname});
-      userStore._id = response.data.user._id;
-      userStore.nickname = response.data.user.nickname;
+      setUser({
+        _id: response.data.user._id,
+        login: response.data.user.login,
+        nickname: response.data.user.nickname
+      });
       router.push('/');
     }
   }).catch(err => console.log(err));

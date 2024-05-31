@@ -63,7 +63,7 @@ const handleYapClick = () => {
       deathTime.value = new Date(new Date().setMonth(new Date().getMonth() + 1));
     }
     yapAPI.post_yap({
-      author: userStore._id,
+      author: userStore.user._id,
       victim: victim.value,
       body: body.value,
       deathTime: deathTime.value
