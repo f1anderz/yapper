@@ -17,7 +17,8 @@
         <div class="yapper-auth-form-third-party-title"><span>Or</span></div>
         <div class="yapper-auth-form-third-party-buttons">
           <google-login :callback="handleGoogleLogin"/>
-          <div @click="handleGitHubClick" class="yapper-auth-form-third-party-buttons-github">Login with github</div>
+          <div @click="handleGitHubClick" class="yapper-auth-form-third-party-buttons-github">Login with github
+            <img src="@/assets/img/icons/github.svg" alt="GitHub"></div>
         </div>
       </div>
       <div class="yapper-auth-form-mode" v-if="mode">Don`t have an account?
@@ -169,6 +170,7 @@ watch(userData, () => {
     }
 
     &-button {
+      margin-top: .3rem;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -176,7 +178,7 @@ watch(userData, () => {
     }
 
     &-third-party {
-      padding-top: .75rem;
+      padding-top: .5rem;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -203,6 +205,31 @@ watch(userData, () => {
         flex-direction: row;
         justify-content: center;
         gap: 1rem;
+
+        &-github {
+          padding: 0 .5rem;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: .5rem;
+          font: .9rem variables.$font-body;
+          background: #ffffff;
+          border: .01rem solid #dddddd;
+
+          & img {
+            width: 1.2rem;
+            height: 1.2rem;
+          }
+
+          @include mixins.breakpoint(xxl) {
+            &:hover {
+              cursor: pointer;
+              background: #F8FAFF;
+              border: .01rem solid  #d2e3fc;
+            }
+          }
+        }
       }
     }
 

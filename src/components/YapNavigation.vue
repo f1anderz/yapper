@@ -6,7 +6,7 @@
   <nav class="yap-navigation">
     <RouterLink class="yap-navigation-link" to="/"><img src="../assets/img/icons/icon.webp" alt="Yapper logo"></RouterLink>
     <RouterLink class="yap-navigation-link" to="/profile">Profile</RouterLink>
-    <RouterLink class="yap-navigation-link" to="/stats">Stats</RouterLink>
+    <RouterLink class="yap-navigation-link" to="/feed">Feed</RouterLink>
   </nav>
 </template>
 
