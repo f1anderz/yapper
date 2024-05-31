@@ -2,12 +2,13 @@
   <div class="yap-select">
     <yap-input v-model="searchString" placeholder="Search victims" name="select-search" width="16rem"/>
     <div v-if="searchActive" class="yap-select-list">
-      <transition-group name="select-list">
-        <div v-for="option in searchedOptions" :key="option._id" @click="handleOptionClick"
-             class="yap-select-list-option">
-          {{ option.nickname }}
-        </div>
-      </transition-group>
+      <div class="yap-select-list-container">
+        <transition-group name="select-list">
+          <div v-for="option in searchedOptions" :key="option._id" @click="handleOptionClick"
+               class="yap-select-list-container-option">@{{ option.nickname }}
+          </div>
+        </transition-group>
+      </div>
     </div>
   </div>
 </template>
@@ -43,11 +44,11 @@ const handleOptionClick = (e) => {
   searchString.value = e.target.innerHTML;
 };
 
-watch(searchString, (newSearchString, oldSearchString) => {
+watch(searchString, (newSearchString,) => {
   emit('selected', newSearchString);
 });
 
-watch(toRef(() => props.clear), (newClear, oldClear) => {
+watch(toRef(() => props.clear), () => {
   searchString.value = '';
 });
 </script>
@@ -62,31 +63,35 @@ watch(toRef(() => props.clear), (newClear, oldClear) => {
   flex-direction: column;
 
   &-list {
+    padding: .2rem 0;
     z-index: 2;
     position: absolute;
     top: 2.2rem;
     left: .5rem;
-    padding: .3rem 0;
     font: 1rem variables.$font-body;
     color: variables.$text-color;
-    box-shadow: -1px 0px 23px 0px rgba(47, 47, 47, 0.45);
+    box-shadow: -1px 0px 23px 0px rgba(47, 47, 47, 0.35);
     background: variables.$secondary-background-color;
-    max-height: 12rem;
-    overflow-y: scroll;
+    border-radius: .2rem;
 
-    &-option {
-      padding: .2rem .5rem;
-      border-bottom: .01rem solid variables.$text-color;
-      min-width: 12rem;
+    &-container {
+      max-height: 12rem;
+      overflow-y: scroll;
 
-      &:last-of-type {
-        border: none;
-      }
+      &-option {
+        padding: .2rem .5rem;
+        border-bottom: .01rem solid variables.$text-color;
+        min-width: 12rem;
 
-      @include mixins.breakpoint(xxl) {
-        &:hover {
-          cursor: pointer;
-          color: variables.$accent-color;
+        &:last-of-type {
+          border: none;
+        }
+
+        @include mixins.breakpoint(xxl) {
+          &:hover {
+            cursor: pointer;
+            color: variables.$accent-color;
+          }
         }
       }
     }

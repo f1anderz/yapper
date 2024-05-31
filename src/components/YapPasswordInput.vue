@@ -1,7 +1,7 @@
 <script setup>
 import {defineModel, ref} from 'vue';
 
-const props = defineProps({width: {type: String, default: '29rem'}});
+const props = defineProps({width: {type: String, default: '28rem'}});
 
 const model = defineModel();
 const mode = ref(true);

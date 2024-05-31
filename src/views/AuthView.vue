@@ -4,9 +4,10 @@
       <div class="yapper-auth-form-title text-gradient" v-if="mode">Login</div>
       <div class="yapper-auth-form-title text-gradient" v-else>Register</div>
       <div class="yapper-auth-form-inputs">
-        <yap-input v-model="login" type="text" placeholder="Login..." name="login"/>
-        <yap-input v-if="!mode" v-model="nickname" type="text" placeholder="Full name..." name="full-name"/>
-        <yap-password-input v-model="password"/>
+        <yap-input v-model="login" type="text" placeholder="Login..." name="login" v-on:keyup.enter="handleAuthClick"/>
+        <yap-input v-if="!mode" v-model="nickname" type="text" placeholder="Full name..." name="full-name"
+                   v-on:keyup.enter="handleAuthClick"/>
+        <yap-password-input v-model="password" v-on:keyup.enter="handleAuthClick"/>
       </div>
       <div class="yapper-auth-form-error" v-if="error.length > 0">{{ error }}</div>
       <div class="yapper-auth-form-button">
@@ -226,7 +227,7 @@ watch(userData, () => {
             &:hover {
               cursor: pointer;
               background: #F8FAFF;
-              border: .01rem solid  #d2e3fc;
+              border: .01rem solid #d2e3fc;
             }
           }
         }

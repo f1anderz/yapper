@@ -2,7 +2,7 @@
   <div class="yap-create">
     <yap-select @selected="onVictimSelect" :clear="clear"/>
     <yap-input type="text" v-model="body" :type="'text'" :name="'yap-body'" :width="'40rem'"
-               :placeholder="'Lest`s yap, shall we?)'"/>
+               :placeholder="'Lest`s yap, shall we?)'" v-on:keyup.enter="handleYapClick"/>
     <div v-if="error.length > 0" class="yap-create-error">
       {{ error }}
     </div>
@@ -54,7 +54,7 @@ const onSelectEmoji = (e) => {
 };
 
 const onVictimSelect = (e) => {
-  victim.value = e;
+  victim.value = e.substring(1);
 };
 
 const handleYapClick = () => {
@@ -67,7 +67,7 @@ const handleYapClick = () => {
       victim: victim.value,
       body: body.value,
       deathTime: deathTime.value
-    }).then(response => {
+    }).then(() => {
       clear.value = !clear.value;
       error.value = '';
       victim.value = '';
