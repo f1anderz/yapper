@@ -37,34 +37,25 @@ exports.users_register = (req, res) => {
                 message: 'Login exists'
             });
         } else {
-            User.find({nickname: req.body.nickname}).exec().then(user => {
-                if (user.length > 0) {
-                    return res.status(409).json({
-                        message: 'Nickname exists'
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+                if (err) {
+                    return res.status(500).json({
+                        error: err
                     });
                 } else {
-                    bcrypt.hash(req.body.password, 10, (err, hash) => {
-                        if (err) {
-                            return res.status(500).json({
-                                error: err
-                            });
-                        } else {
-                            const user = new User({
-                                _id: new mongoose.Types.ObjectId,
-                                login: req.body.login,
-                                password: hash,
-                                nickname: req.body.nickname
-                            });
-                            user.save().then(result => {
-                                res.status(201).json({status: true, user: result});
-                            }).catch(err => {
-                                res.status(500).json({
-                                    error: err
-                                });
-                            });
-                        }
+                    const user = new User({
+                        _id: new mongoose.Types.ObjectId,
+                        login: req.body.login,
+                        password: hash,
+                        name: req.body.name
                     });
-
+                    user.save().then(result => {
+                        res.status(201).json({status: true, user: result});
+                    }).catch(err => {
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
                 }
             });
         }
@@ -110,30 +101,18 @@ exports.users_auth = (req, res) => {
                     status: true, user: user
                 });
             } else {
-                User.findOne({nickname: req.body.nickname}).exec().then(result => {
-                    if (result) {
-                        return res.status(409).json({
-                            message: 'Nickname exists'
-                        });
-                    } else {
-                        const newUser = User({
-                            _id: new mongoose.Types.ObjectId,
-                            login: req.body.nickname,
-                            nickname: req.body.nickname,
-                            google: req.body.googleId
-                        });
-                        newUser.save().then(newUser => {
-                            res.status(201).json({
-                                status: true, user: newUser
-                            });
-                        }).catch(err => {
-                            console.log(err)
-                            res.status(500).json({
-                                error: err
-                            });
-                        });
-                    }
+                const newUser = User({
+                    _id: new mongoose.Types.ObjectId,
+                    name: req.body.name,
+                    login: req.body.login,
+                    google: req.body.googleId
+                });
+                newUser.save().then(newUser => {
+                    res.status(201).json({
+                        status: true, user: newUser
+                    });
                 }).catch(err => {
+                    console.log(err);
                     res.status(500).json({
                         error: err
                     });
@@ -151,16 +130,16 @@ exports.users_auth = (req, res) => {
                     status: true, user: user
                 });
             } else {
-                User.findOne({nickname: req.body.nickname}).exec().then(result => {
+                User.findOne({name: req.body.name}).exec().then(result => {
                     if (result) {
                         return res.status(409).json({
-                            message: 'Nickname exists'
+                            message: 'Name exists'
                         });
                     } else {
                         const newUser = User({
                             _id: new mongoose.Types.ObjectId,
-                            nickname: req.body.nickname,
-                            login: req.body.nickname,
+                            name: req.body.name,
+                            login: req.body.login,
                             gitHub: req.body.gitHubId
                         });
                         newUser.save().then(newUser => {
@@ -194,7 +173,6 @@ exports.github_get_token = (req, res) => {
     }).then(response => {
         res.status(200).json(response.data);
     }).catch(err => {
-        console.log(err)
         res.status(500).json(err);
     });
 };
@@ -207,7 +185,6 @@ exports.github_get_user_data = (req, res) => {
     }).then(response => {
         res.status(200).json(response.data);
     }).catch(err => {
-        console.log(err)
         res.status(500).json(err);
     });
 };

@@ -5,8 +5,8 @@ const userSchema = mongoose.Schema({
         type: String, required: false, unique: true
     }, password: {
         type: String, required: false
-    }, nickname: {
-        type: String, required: true, unique: true
+    }, name: {
+        type: String, required: true
     }, google: {
         type: String, required: false
     }, gitHub: {

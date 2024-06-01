@@ -79,7 +79,8 @@ exports.get_random_yap = (req, res) => {
 
 exports.create_yap = (req, res) => {
     try {
-        User.findOne({nickname: req.body.victim}).exec().then(user => {
+        console.log(req.body)
+        User.findOne({name: req.body.victim}).exec().then(user => {
             if (user) {
                 req.body.victim = user._id;
                 const yap = new Yap({
