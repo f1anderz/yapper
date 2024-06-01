@@ -3,6 +3,9 @@ import axios from 'axios';
 const base_url = 'http://localhost:3000/yaps';
 
 export default {
+    async get_yaps() {
+        return await axios.get(base_url);
+    },
     async get_random_yap(yapId) {
         return await axios.get(base_url + '/random/' + yapId);
     }, async get_yap(yapId) {

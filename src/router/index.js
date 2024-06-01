@@ -5,6 +5,7 @@ import AuthView from '@/views/AuthView.vue';
 import {useUserStore} from '@/stores/user.js';
 import {inject} from 'vue';
 import ProfileView from '@/views/ProfileView.vue';
+import FeedView from '@/views/FeedView.vue';
 
 const router = createRouter({
     history: createWebHistory(), routes: [{
@@ -13,6 +14,8 @@ const router = createRouter({
         path: '/auth', name: 'Authentication', component: AuthView
     }, {
         path: '/profile', name: 'Profile', component: ProfileView
+    }, {
+        path: '/feed', name: 'Feed', component: FeedView
     }, {
         path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundView
     }]

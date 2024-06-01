@@ -3,19 +3,23 @@
     <div class="yapper-profile-dashboard">
 
     </div>
-    <div @click="handleLogout">Logout</div>
+    <div class="yapper-profile-yaps">
+    </div>
+    <yap-button @click="handleLogout">Logout</yap-button>
   </div>
 </template>
 
 <script setup>
 import {useUserStore} from '@/stores/user.js';
-import {inject} from 'vue';
+import {inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
+import YapButton from '@/components/YapButton.vue';
 
 const cookies = inject('$cookies');
 const router = useRouter();
 
 const userStore = useUserStore();
+
 
 const handleLogout = async () => {
   cookies.remove('user');
@@ -29,5 +33,14 @@ const handleLogout = async () => {
 
 .yapper-profile {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+
+  &-dashboard {
+    display: flex;
+    flex-direction: row;
+  }
 }
 </style>

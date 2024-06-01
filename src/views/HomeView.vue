@@ -138,7 +138,14 @@ const handleYapClick = () => {
     flex-direction: column;
     justify-content: flex-start;
     gap: 1rem;
+    max-height: 75vh;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     &-title {
       font: 1.3rem variables.$font-header;
