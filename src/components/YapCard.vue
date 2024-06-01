@@ -48,6 +48,7 @@ const userLiked = computed(() => {
 @use '@/assets/scss/mixins';
 
 .yap-card {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: .25rem;
@@ -64,8 +65,8 @@ const userLiked = computed(() => {
     font-size: 1rem;
     padding-left: 2rem;
 
-
     &-service {
+      padding-left: 1rem;
       display: flex;
       flex-direction: row;
       align-items: center;

@@ -113,7 +113,6 @@ const handleYapClick = () => {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 1rem;
     border-bottom: .01rem solid variables.$accent-color;
 
     &-button {
@@ -129,11 +128,11 @@ const handleYapClick = () => {
 
   &-create {
     padding: 0 5%;
-    border-bottom: .01rem solid variables.$accent-color;
+    border-bottom: .1rem solid variables.$accent-color;
   }
 
   &-feed {
-    padding-top: 2rem;
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

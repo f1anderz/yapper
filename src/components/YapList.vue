@@ -22,11 +22,11 @@ const emit = defineEmits(['likeClick']);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
 
   &-item {
-    width: 100%;
+    width: 90%;
     padding-bottom: .5rem;
     display: flex;
     flex-direction: row;

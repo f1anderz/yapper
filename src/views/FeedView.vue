@@ -1,9 +1,10 @@
 <template>
   <div class="yapper-feed">
-    <div class="yapper-feed-yaps" v-if="yaps !== null">
-      <transition-group>
-        <yap-card v-for="yap in yaps" :key="yap._id" :yap="yap" @like-click="handleLikeClick"/>
-      </transition-group>
+    <div class="yapper-feed-yaps">
+      <div class="yapper-feed-yaps-title text-gradient">Recent yaps</div>
+      <div class="yapper-feed-yaps-list">
+        <yap-list v-if="yaps !== null" :yaps="yaps"/>
+      </div>
     </div>
     <div class="yapper-feed-dashboard">
       <div class="yapper-feed-dashboard-title text-gradient">Statistics:</div>
@@ -17,8 +18,8 @@ import statsAPI from '@/api/statistics.js';
 import yapAPI from '@/api/yap.js';
 import {ref} from 'vue';
 import YapStatsList from '@/components/YapStatsList.vue';
-import YapCard from '@/components/YapCard.vue';
 import {useUserStore} from '@/stores/user.js';
+import YapList from '@/components/YapList.vue';
 
 const userStore = useUserStore();
 
@@ -61,6 +62,27 @@ const handleLikeClick = (e) => {
 
   &-yaps {
     width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: .75rem;
+
+    &-title {
+      padding-left: 3rem;
+      font: 1.3rem variables.$font-header
+    }
+
+    &-list {
+      max-height: 100vh;
+      overflow-y: scroll;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
 
   &-dashboard {
