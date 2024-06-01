@@ -59,7 +59,7 @@ const getYap = () => {
 };
 
 const getYaps = () => {
-  yapAPI.get_victim_yap({userId: userStore.user._id}).then(response => {
+  yapAPI.get_victim_yaps({userId: userStore.user._id}).then(response => {
     if (response.data.length > 0) {
       yaps.value = response.data;
     } else {
@@ -138,6 +138,7 @@ const handleYapClick = () => {
     justify-content: flex-start;
     gap: 1rem;
     max-height: 75vh;
+    min-height: 60vh;
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;

@@ -10,8 +10,11 @@
       </div>
       <div class="yap-card-body-service-time">Expires in: {{ aliveUntil }}</div>
     </div>
-
-    <div class="yap-card-controls" v-if="props.enable_controls"></div>
+    <div class="yap-card-controls" v-if="props.enableControls">
+      <img @click="emit('editClick', props.yap)"
+           src="@/assets/img/icons/edit.svg" alt="Edit">
+      <img @click="emit('deleteClick', props.yap._id)" src="@/assets/img/icons/bin.svg" alt="Delete">
+    </div>
   </div>
 </template>
 
@@ -20,15 +23,15 @@ import {computed} from 'vue';
 import {useUserStore} from '@/stores/user.js';
 
 const userStore = useUserStore();
-const props = defineProps({yap: {type: Object, required: true}, enable_controls: Boolean});
-const emit = defineEmits(['likeClick']);
+const props = defineProps({yap: {type: Object, required: true}, enableControls: Boolean});
+const emit = defineEmits(['likeClick', 'editClick', 'deleteClick']);
 
 const published = Math.floor(Number((new Date(props.yap.deathTime) - new Date()) / (1000 * 60 * 60)));
 
 const aliveUntil = computed(() => {
   if (published > 8765) {
     return Math.floor(published / 8765) + 'y';
-  } else if(published > 730){
+  } else if (published > 730) {
     return Math.floor(published / 730) + 'mos';
   } else if (published > 24) {
     return Math.floor(published / 24) + 'd';
@@ -99,5 +102,24 @@ const userLiked = computed(() => {
     }
   }
 
+  &-controls {
+    padding-top: .25rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+
+    & img {
+      width: 1rem;
+      height: 1rem;
+
+      @include mixins.breakpoint(xxl) {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
 </style>

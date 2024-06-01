@@ -10,8 +10,10 @@ export default {
         return await axios.get(base_url + '/random/' + yapId);
     }, async get_yap(yapId) {
         return await axios.get(base_url + '/' + yapId);
-    }, async get_victim_yap(getData) {
+    }, async get_victim_yaps(getData) {
         return await axios.get(base_url + '/victim/' + getData.userId);
+    }, async get_author_yaps(getData) {
+        return await axios.get(base_url + '/author/' + getData.userId);
     }, async trigger_like(patchData) {
         return await axios.patch(base_url + '/like/' + patchData.yapId, {
             userId: patchData.userId
@@ -23,5 +25,7 @@ export default {
             body: postData.body,
             deathTime: postData.deathTime
         });
+    }, async delete_yap(yapId) {
+        return await axios.delete(base_url + '/' + yapId);
     }
 };

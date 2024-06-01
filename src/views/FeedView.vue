@@ -3,7 +3,7 @@
     <div class="yapper-feed-yaps">
       <div class="yapper-feed-yaps-title text-gradient">Recent yaps</div>
       <div class="yapper-feed-yaps-list">
-        <yap-list v-if="yaps !== null" :yaps="yaps"/>
+        <yap-list v-if="yaps !== null" :yaps="yaps" @like-click="handleLikeClick"/>
       </div>
     </div>
     <div class="yapper-feed-dashboard">
@@ -75,6 +75,7 @@ const handleLikeClick = (e) => {
 
     &-list {
       max-height: 100vh;
+      min-height: 90vh;
       overflow-y: scroll;
       -ms-overflow-style: none;
       scrollbar-width: none;

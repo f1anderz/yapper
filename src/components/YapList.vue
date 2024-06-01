@@ -2,7 +2,8 @@
   <div class="yap-list">
     <transition-group name="yap-list">
       <span v-for="yap in props.yaps" :key="yap._id" class="yap-list-item">
-        <yap-card :yap="yap" @like-click="e => emit('likeClick', e)"/>
+        <yap-card :yap="yap" @like-click="e => emit('likeClick', e)" :enable-controls="props.enableControls"
+                  @edit-click="e => emit('editClick', e)" @delete-click="e => emit('deleteClick', e)"/>
       </span>
     </transition-group>
   </div>
@@ -11,8 +12,8 @@
 <script setup>
 import YapCard from '@/components/YapCard.vue';
 
-const props = defineProps(['yaps']);
-const emit = defineEmits(['likeClick']);
+const props = defineProps(['yaps', 'enableControls']);
+const emit = defineEmits(['likeClick', 'editClick', 'deleteClick']);
 </script>
 
 <style scoped lang="scss">

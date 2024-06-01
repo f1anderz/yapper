@@ -15,7 +15,6 @@
     "pinia": "^2.1.7",
     "sass": "^1.77.2",
     "vue": "^3.4.21",
-    "vue-apple-login": "^2.0.1",
     "vue-cookies": "^1.8.4",
     "vue-router": "^4.3.2",
     "vue3-emoji-picker": "^1.1.8",
