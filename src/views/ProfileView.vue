@@ -1,5 +1,8 @@
 <template>
   <div class="yapper-profile">
+    <div class="yapper-profile-dashboard">
+
+    </div>
     <div @click="handleLogout">Logout</div>
   </div>
 </template>
@@ -16,7 +19,7 @@ const userStore = useUserStore();
 
 const handleLogout = async () => {
   cookies.remove('user');
-  userStore.user = null;
+  userStore.user = {_id: null};
   await router.push('/');
 };
 </script>

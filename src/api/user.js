@@ -6,6 +6,7 @@ export default {
     async get_users() {
         return await axios.get(base_url);
     }, async login(loginData) {
+
         return await axios.post(base_url + '/login', {
             login: loginData.login,
             password: loginData.password
@@ -13,17 +14,19 @@ export default {
     }, async register(registerData) {
         return await axios.post(base_url + '/register', {
             login: registerData.login,
-            nickname: registerData.nickname,
+            name: registerData.name,
             password: registerData.password
         });
     }, async google_auth(registerData) {
         return await axios.post(base_url + '/auth', {
-            nickname: registerData.nickname,
+            name: registerData.name,
+            login: registerData.login,
             googleId: registerData.sub
         });
     }, async github_auth(registerData) {
         return await axios.post(base_url + '/auth', {
-            nickname: registerData.nickname,
+            name: registerData.name,
+            login: registerData.login,
             gitHubId: registerData.gitHubId
         });
     }, async github_get_token(code) {

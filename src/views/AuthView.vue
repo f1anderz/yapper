@@ -5,7 +5,7 @@
       <div class="yapper-auth-form-title text-gradient" v-else>Register</div>
       <div class="yapper-auth-form-inputs">
         <yap-input v-model="login" type="text" placeholder="Login..." name="login" v-on:keyup.enter="handleAuthClick"/>
-        <yap-input v-if="!mode" v-model="nickname" type="text" placeholder="Full name..." name="full-name"
+        <yap-input v-if="!mode" v-model="name" type="text" placeholder="Full name..." name="full-name"
                    v-on:keyup.enter="handleAuthClick"/>
         <yap-password-input v-model="password" v-on:keyup.enter="handleAuthClick"/>
       </div>
@@ -55,7 +55,7 @@ const error = ref('');
 const userData = ref({});
 const login = defineModel('login', {default: ''});
 const password = defineModel('password', {default: ''});
-const nickname = defineModel('nickname', {default: ''});
+const name = defineModel('name', {default: ''});
 
 if (route.query.code) {
   const {code} = route.query;
@@ -80,21 +80,20 @@ const handleAuthClick = () => {
           setUser({
             _id: response.data.user._id,
             login: response.data.user.login,
-            nickname: response.data.user.nickname
+            name: response.data.user.name
           });
           router.push('/');
         }
       }).catch(err => error.value = err.response.data.message);
     } else {
-      if (nickname.value.length > 0) {
-        const compiledNickname = nickname.value.replace(/ /g, '.').toLowerCase();
-        userAPI.register({login: login.value, nickname: compiledNickname, password: password.value}).then(response => {
+      if (name.value.length > 0) {
+        userAPI.register({login: login.value, name: name.value, password: password.value}).then(response => {
           if (response.data.status) {
             error.value = '';
             setUser({
               _id: response.data.user._id,
               login: response.data.user.login,
-              nickname: response.data.user.nickname
+              name: response.data.user.name
             });
             router.push('/');
           }
@@ -114,9 +113,10 @@ const handleGitHubClick = () => {
 
 const handleGoogleLogin = (e) => {
   const userInfo = decodeCredential(e.credential);
-  const compiledNickname = userInfo.name.replace(/ /g, '.').toLowerCase();
+  login.value = userInfo.name.replace(/ /g, '.').toLowerCase()
   userAPI.google_auth({
-    nickname: compiledNickname,
+    name: userInfo.name,
+    login: login.value,
     sub: userInfo.sub
   }).then(response => {
     if (response.data.status) {
@@ -124,7 +124,7 @@ const handleGoogleLogin = (e) => {
       setUser({
         _id: response.data.user._id,
         login: response.data.user.login,
-        nickname: response.data.user.nickname
+        name: response.data.user.name
       });
       router.push('/');
     }
@@ -133,9 +133,9 @@ const handleGoogleLogin = (e) => {
 
 watch(userData, () => {
   console.log(userData);
-  const compiledNickname = userData.value.name.replace(/ /g, '.').toLowerCase();
   userAPI.github_auth({
-    nickname: compiledNickname,
+    name: userData.value.name,
+    login: userData.value.login,
     gitHubId: userData.value.id
   }).then(response => {
     if (response.data.status) {
@@ -143,7 +143,7 @@ watch(userData, () => {
       setUser({
         _id: response.data.user._id,
         login: response.data.user.login,
-        nickname: response.data.user.nickname
+        name: response.data.user.name
       });
       router.push('/');
     }

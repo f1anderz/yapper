@@ -1,7 +1,7 @@
 <template>
   <div class="yap-header">
     <YapNavigation/>
-    <div class="yap-header-user" v-if="userStore.isAuthenticated">{{ userStore.user.nickname }}</div>
+    <div class="yap-header-user" v-if="userStore.isAuthenticated">{{ userStore.user.name }}</div>
   </div>
 </template>
 

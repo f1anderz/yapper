@@ -5,7 +5,9 @@
       <div class="yap-select-list-container">
         <transition-group name="select-list">
           <div v-for="option in searchedOptions" :key="option._id" @click="handleOptionClick"
-               class="yap-select-list-container-option">@{{ option.nickname }}
+               class="yap-select-list-container-option">
+            <div class="yap-select-list-container-option-name">{{ option.name }}</div>
+            <div class="yap-select-list-container-option-nickname">@{{ option.login }}</div>
           </div>
         </transition-group>
       </div>
@@ -30,13 +32,13 @@ const searchString = defineModel({default: ''});
 
 const searchActive = computed(() => {
   return searchString.value.length > 0 && selectOptions.value.filter(o => {
-    return o.nickname === searchString.value;
+    return o.name.toLowerCase() === searchString.value.toLowerCase() || o.login.toLowerCase() === searchString.value.toLowerCase();
   }).length === 0 && searchedOptions.value.length !== 0;
 });
 
 const searchedOptions = computed(() => {
   return selectOptions.value.filter(o => {
-    return o.nickname.includes(searchString.value);
+    return o.name.toLowerCase().includes(searchString.value.toLowerCase()) || o.login.toLowerCase().includes(searchString.value.toLowerCase());
   });
 });
 
@@ -79,9 +81,17 @@ watch(toRef(() => props.clear), () => {
       overflow-y: scroll;
 
       &-option {
-        padding: .2rem .5rem;
+        padding: .5rem .8rem;
         border-bottom: .01rem solid variables.$text-color;
         min-width: 12rem;
+
+        &-name {
+          color: variables.$accent-color;
+        }
+
+        &-nickname {
+          padding-left: .5rem;
+        }
 
         &:last-of-type {
           border: none;
