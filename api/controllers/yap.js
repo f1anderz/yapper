@@ -4,10 +4,15 @@ const Yap = require('../models/yap');
 const User = require('../models/user');
 
 exports.get_all_yaps = (req, res) => {
-    Yap.find().sort({likes: 'desc'}).exec().then(yaps => {
+    Yap.find().sort({likes: 'desc'}).populate('victim').exec().then(yaps => {
         yaps = yaps.filter(y => {
             return y.deathTime !== null && y.deathTime > new Date() || y.deathTime === null;
         });
+        let mostLikes = yaps.shift();
+        yaps.sort((yap1, yap2) => {
+            return yap2.deathTime - yap1.deathTime;
+        });
+        yaps.unshift(mostLikes);
         res.status(200).json(yaps);
     }).catch(err => {
         res.status(500).json({
@@ -79,7 +84,7 @@ exports.get_random_yap = (req, res) => {
 
 exports.create_yap = (req, res) => {
     try {
-        console.log(req.body)
+        console.log(req.body);
         User.findOne({name: req.body.victim}).exec().then(user => {
             if (user) {
                 req.body.victim = user._id;
