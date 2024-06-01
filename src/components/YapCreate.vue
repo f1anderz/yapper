@@ -54,7 +54,7 @@ const onSelectEmoji = (e) => {
 };
 
 const onVictimSelect = (e) => {
-  victim.value = e.substring(1);
+  victim.value = e;
 };
 
 const handleYapClick = () => {

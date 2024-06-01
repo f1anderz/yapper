@@ -1,6 +1,6 @@
 <template>
   <div class="yap-card">
-    <div class="yap-card-victim">@{{ props.yap.victim.name }} got yapped:</div>
+    <div class="yap-card-victim">{{ props.yap.victim.name }} got yapped:</div>
     <div class="yap-card-body">{{ props.yap.body }}</div>
     <div class="yap-card-likes">
       <img v-if="userLiked" @click="emit('likeClick', props.yap._id)" src="@/assets/img/icons/heart.svg" alt="Likes">

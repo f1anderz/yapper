@@ -4,9 +4,9 @@
     <div v-if="searchActive" class="yap-select-list">
       <div class="yap-select-list-container">
         <transition-group name="select-list">
-          <div v-for="option in searchedOptions" :key="option._id" @click="handleOptionClick"
+          <div v-for="option in searchedOptions" :key="option._id" @click="handleOptionClick(option._id)"
                class="yap-select-list-container-option">
-            <div class="yap-select-list-container-option-name">{{ option.name }}</div>
+            <div class="yap-select-list-container-option-name text-gradient">{{ option.name }}</div>
             <div class="yap-select-list-container-option-nickname">@{{ option.login }}</div>
           </div>
         </transition-group>
@@ -43,7 +43,9 @@ const searchedOptions = computed(() => {
 });
 
 const handleOptionClick = (e) => {
-  searchString.value = e.target.innerHTML;
+  searchString.value = selectOptions.value.find(o => {
+    return o._id === e;
+  }).name;
 };
 
 watch(searchString, (newSearchString,) => {
@@ -65,7 +67,7 @@ watch(toRef(() => props.clear), () => {
   flex-direction: column;
 
   &-list {
-    padding: .2rem 0;
+    padding: .2rem 0 .2rem .5rem;
     z-index: 2;
     position: absolute;
     top: 2.2rem;
@@ -74,20 +76,17 @@ watch(toRef(() => props.clear), () => {
     color: variables.$text-color;
     box-shadow: -1px 0px 23px 0px rgba(47, 47, 47, 0.35);
     background: variables.$secondary-background-color;
-    border-radius: .2rem;
+    border-radius: .3rem;
 
     &-container {
       max-height: 12rem;
       overflow-y: scroll;
+      padding-right: .2rem;
 
       &-option {
         padding: .5rem .8rem;
         border-bottom: .01rem solid variables.$text-color;
         min-width: 12rem;
-
-        &-name {
-          color: variables.$accent-color;
-        }
 
         &-nickname {
           padding-left: .5rem;
