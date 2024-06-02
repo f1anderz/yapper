@@ -1,22 +1,25 @@
 <template>
+  <yap-message-box :visible="visible">{{ message }}</yap-message-box>
   <div class="yapper-profile">
     <div class="yapper-profile-dashboard">
-      Your stats
+      <div class="yapper-profile-dashboard-title text-gradient">Your stats</div>
+      <div class="yapper-profile-dashboard-list" v-if="stats !== null">
+        <yap-stats-list :list="stats"/>
+      </div>
     </div>
     <div class="yapper-profile-yaps">
       <div class="yapper-profile-yaps-title text-gradient">Your yaps</div>
-      <div class="yapper-profile-yaps-search">Search for yaps</div>
       <div class="yapper-profile-yaps-list">
-        <yap-list v-if="yaps !== null" :yaps="searchedYaps.value" :enable-controls="true" @like-click="handleLikeClick"
-                  @edit-click="handleEditClick" @delete-click="handleDeleteClick"/>
+        <yap-list v-if="yaps !== null" :yaps="yaps" :enable-controls="true"
+                  @like-click="handleLikeClick" @edit-click="handleEditClick" @delete-click="handleDeleteClick"/>
       </div>
     </div>
     <yap-button @click="handleLogout">Logout</yap-button>
   </div>
-
   <div class="edit" v-if="editMode" @click="closeEdit">
     <div class="edit-context">
-      <yap-input :model-value="yap" placeholder="Edit yap..." name="yap" type="text" width="32rem"/>
+      <yap-input class="edit-context-input" v-model="yap" placeholder="Edit yap..." name="yap" type="text"
+                 width="32rem"/>
       <div class="edit-context-switches">
         <div v-click-outside="() => {emojiPickerVisible = false}" class="edit-context-switches-emoji">
           <img @click="emojiPickerVisible = !emojiPickerVisible" src="@/assets/img/icons/emoji.svg"
@@ -38,15 +41,18 @@
 
 <script setup>
 import {useUserStore} from '@/stores/user.js';
-import {computed, inject, ref} from 'vue';
+import {inject, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import YapButton from '@/components/YapButton.vue';
 import YapList from '@/components/YapList.vue';
 import yapAPI from '@/api/yap.js';
+import statsAPI from '@/api/statistics.js';
 import YapInput from '@/components/YapInput.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import EmojiPicker from 'vue3-emoji-picker';
+import YapMessageBox from '@/components/YapMessageBox.vue';
+import YapStatsList from '@/components/YapStatsList.vue';
 
 const cookies = inject('$cookies');
 const router = useRouter();
@@ -54,16 +60,22 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const yaps = ref(null);
+const stats = ref(null);
+const _id = ref('');
+const yap = defineModel('yap');
+const deathTime = defineModel('deathTime');
 const editMode = ref(false);
 const datePickerVisible = ref(false);
 const emojiPickerVisible = ref(false);
-const yap = defineModel('yap');
-const deathTime = defineModel('deathTime');
-const _id = ref('');
+const visible = ref(false);
+const message = ref(' ');
 
 const getData = () => {
   yapAPI.get_author_yaps({userId: userStore.user._id}).then(response => {
     yaps.value = response.data;
+  }).catch(err => console.log(err));
+  statsAPI.get_user_stats(userStore.user._id).then(response => {
+    stats.value = response.data;
   }).catch(err => console.log(err));
 };
 
@@ -89,22 +101,36 @@ const handleEditClick = (e) => {
 };
 
 const handleDeleteClick = (e) => {
-  yapAPI.delete_yap(e).then(response => {
+  yapAPI.delete_yap(e).then(() => {
     getData();
+    message.value = 'Deleted!';
+    visible.value = true;
+    setTimeout(() => {
+      visible.value = false;
+    }, 750);
   }).catch(err => console.log(err));
 };
 
-const handleSaveClick = (e) => {
-
+const handleSaveClick = () => {
+  editMode.value = false;
+  yapAPI.update_yap({yapId: _id.value, body: yap.value, deathTime: deathTime.value}).then(() => {
+    getData();
+    message.value = 'Edited!';
+    visible.value = true;
+    setTimeout(() => {
+      visible.value = false;
+    }, 750);
+  }).catch(err => console.log(err));
 };
 
-const searchedYaps = computed(() => {
-  return yaps;
-});
-
 const closeEdit = (e) => {
-  if (!e.target.classList[0].includes('context')) {
-    editMode.value = false;
+  try {
+    if (e.target.nodeName !== 'BUTTON' && e.target.nodeName !== 'INPUT') {
+      if (!e.target.classList[0].includes('context')) {
+        editMode.value = false;
+      }
+    }
+  } catch (err) {
   }
 };
 
@@ -128,6 +154,7 @@ const onSelectEmoji = (e) => {
   padding-bottom: 2rem;
 
   &-yaps {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -139,8 +166,9 @@ const onSelectEmoji = (e) => {
     }
 
     &-list {
-      max-height: 90vh;
-      min-height: 75vh;
+      width: 100%;
+      max-height: 68vh;
+      min-height: 68vh;
       overflow-y: scroll;
       -ms-overflow-style: none;
       scrollbar-width: none;
@@ -152,8 +180,20 @@ const onSelectEmoji = (e) => {
   }
 
   &-dashboard {
+    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: .3rem;
+
+    &-title {
+      font: 1.15rem variables.$font-header;
+    }
+
+    &-list {
+      padding-left: 5%;
+    }
   }
 }
 

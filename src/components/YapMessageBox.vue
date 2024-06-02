@@ -17,6 +17,7 @@ const props = defineProps(['visible']);
 .yap-message-box {
   position: absolute;
   left: 50%;
+  z-index: 100;
   transition: opacity .5s ease-in-out;
 
   &-content {

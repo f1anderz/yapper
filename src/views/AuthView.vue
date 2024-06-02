@@ -158,7 +158,10 @@ watch(userData, () => {
 .yapper-auth {
   width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   padding-top: 20vh;
+  min-height: 95vh;
 
   &-form {
     display: flex;

@@ -7,15 +7,15 @@ export default {
         return await axios.get(base_url);
     },
     async get_random_yap(yapId) {
-        return await axios.get(base_url + '/random/' + yapId);
+        return await axios.get(base_url + `/random/${yapId}`);
     }, async get_yap(yapId) {
-        return await axios.get(base_url + '/' + yapId);
+        return await axios.get(base_url + `/${yapId}`);
     }, async get_victim_yaps(getData) {
-        return await axios.get(base_url + '/victim/' + getData.userId);
+        return await axios.get(base_url + `/victim/${getData.userId}`);
     }, async get_author_yaps(getData) {
-        return await axios.get(base_url + '/author/' + getData.userId);
+        return await axios.get(base_url + `/author/${getData.userId}`);
     }, async trigger_like(patchData) {
-        return await axios.patch(base_url + '/like/' + patchData.yapId, {
+        return await axios.patch(base_url + `/like/${patchData.yapId}`, {
             userId: patchData.userId
         });
     }, async post_yap(postData) {
@@ -26,6 +26,11 @@ export default {
             deathTime: postData.deathTime
         });
     }, async delete_yap(yapId) {
-        return await axios.delete(base_url + '/' + yapId);
+        return await axios.delete(base_url + `/${yapId}`);
+    }, async update_yap({yapId, body, deathTime}) {
+        return await axios.patch(base_url + `/${yapId}`, {
+            body: body,
+            deathTime: deathTime
+        });
     }
 };

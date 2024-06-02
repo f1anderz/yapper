@@ -30,8 +30,8 @@ export default {
             gitHubId: registerData.gitHubId
         });
     }, async github_get_token(code) {
-        return await axios.get(base_url + '/github/getToken?code=' + code);
+        return await axios.get(base_url + `/github/getToken?code=${code}`);
     }, async github_get_user_data(token) {
-        return await axios.get(base_url + '/github/getUserData?token=' + token);
+        return await axios.get(base_url + `/github/getUserData?token=${token}`);
     }
 };
