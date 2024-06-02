@@ -16,6 +16,7 @@ const route = useRoute();
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .yapper-not-found {
   display: flex;
@@ -23,6 +24,7 @@ const route = useRoute();
   align-items: center;
   font-family: variables.$font-body;
   padding-top: 20vh;
+  min-height: 100vh;
 
   &-code {
     font-size: 10rem;
@@ -32,6 +34,9 @@ const route = useRoute();
     font-size: 1.8rem;
     margin-top: -2rem;
     color: variables.$text-color;
+    @include mixins.breakpoint(xs) {
+      font-size: 1.5rem;
+    }
   }
 
   &-link a {

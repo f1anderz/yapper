@@ -1,14 +1,14 @@
 <template>
   <div class="yapper-feed">
+    <div class="yapper-feed-dashboard">
+      <div class="yapper-feed-dashboard-title text-gradient">Statistics:</div>
+      <yap-stats-list v-if="stats !== null" :list="stats"/>
+    </div>
     <div class="yapper-feed-yaps">
       <div class="yapper-feed-yaps-title text-gradient">Recent yaps</div>
       <div class="yapper-feed-yaps-list">
         <yap-list v-if="yaps !== null" :yaps="yaps" @like-click="handleLikeClick"/>
       </div>
-    </div>
-    <div class="yapper-feed-dashboard">
-      <div class="yapper-feed-dashboard-title text-gradient">Statistics:</div>
-      <yap-stats-list v-if="stats !== null" :list="stats"/>
     </div>
   </div>
 </template>
@@ -51,14 +51,16 @@ const handleLikeClick = (e) => {
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .yapper-feed {
   position: relative;
   padding-top: 3vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  gap: 2rem;
 
   &-yaps {
     width: 95%;
@@ -74,6 +76,7 @@ const handleLikeClick = (e) => {
     }
 
     &-list {
+      width: 100%;
       max-height: 100vh;
       min-height: 90vh;
       overflow-y: scroll;
@@ -100,6 +103,12 @@ const handleLikeClick = (e) => {
     border-radius: 1rem;
     color: variables.$text-color;
     box-shadow: -1px 0px 23px 0px rgba(47, 47, 47, 0.25);
+
+    @include mixins.breakpoint(xs){
+      position: relative;
+      left: 0;
+      width: 100%;
+    }
 
     &-title {
       font: 1.2rem variables.$font-header;

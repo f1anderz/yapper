@@ -138,6 +138,14 @@ watch(deathTime, () => {
 
         }
       }
+
+      @include mixins.breakpoint(xs) {
+        &-date {
+          &-select {
+            left: -200%;
+          }
+        }
+      }
     }
   }
 

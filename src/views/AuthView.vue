@@ -173,6 +173,10 @@ watch(userData, () => {
     padding: 2rem 3rem;
     border-radius: 1rem;
 
+    @include mixins.breakpoint(xs){
+      padding: .75rem 1.5rem;
+    }
+
     &-title {
       font: 1.5rem variables.$font-header;
       text-align: center;
@@ -220,8 +224,12 @@ watch(userData, () => {
       &-buttons {
         display: flex;
         flex-direction: row;
-        justify-content: center;
         gap: 1rem;
+
+        @include mixins.breakpoint(xs){
+          flex-direction: column;
+          gap: .5rem;
+        }
 
         &-github {
           padding: 0 .5rem;
@@ -233,6 +241,10 @@ watch(userData, () => {
           font: .9rem variables.$font-body;
           background: #ffffff;
           border: .01rem solid #dddddd;
+
+          @include mixins.breakpoint(xs){
+            padding: .55rem .5rem;
+          }
 
           & img {
             width: 1.2rem;

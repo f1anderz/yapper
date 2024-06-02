@@ -14,6 +14,7 @@ const userStore = useUserStore();
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .yap-header {
   width: 100%;
@@ -24,6 +25,10 @@ const userStore = useUserStore();
   padding: 1rem 20%;
   background: variables.$secondary-background-color;
   box-shadow: 0 .1rem .8rem 0 rgba(47, 47, 47, .3);
+
+  @include mixins.breakpoint(xs){
+    padding: 1rem 5%;
+  }
 
   &-user {
     font: 1.2rem variables.$font-header;

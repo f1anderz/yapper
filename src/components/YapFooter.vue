@@ -14,6 +14,7 @@
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .yap-footer {
   width: 100%;
@@ -26,6 +27,10 @@
   box-shadow: 0 .1rem .8rem 0 rgba(47, 47, 47, .3);
   font: 1rem variables.$font-header;
   color: variables.$text-color;
+
+  @include mixins.breakpoint(xs){
+    padding: 1rem 5%;
+  }
 
   &-copyright, &-author {
     font-size: 1.1rem;

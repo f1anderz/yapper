@@ -19,6 +19,12 @@ import YapFooter from '@/components/YapFooter.vue';
 @import '@/assets/scss/style';
 
 main {
-  padding: 0 27%;
+  @include breakpoint(xs) {
+    padding: 0 7%;
+  }
+
+  @include breakpoint(xxl) {
+    padding: 0 27%;
+  }
 }
 </style>

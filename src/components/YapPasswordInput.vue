@@ -21,7 +21,6 @@ const mode = ref(true);
 @use '@/assets/scss/mixins';
 
 .yap-password-input {
-  width: v-bind('props.width');
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -30,6 +29,14 @@ const mode = ref(true);
   gap: .5rem;
   border-radius: 2rem;
   background: variables.$background-color;
+
+  @include mixins.breakpoint(xs){
+    width: 18rem;
+  }
+
+  @include mixins.breakpoint(xxl){
+    width: v-bind('props.width');
+  }
 
   & input {
     width: 100%;

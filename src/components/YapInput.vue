@@ -11,9 +11,9 @@ const model = defineModel();
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .yap-input {
-  width: v-bind('props.width');
   display: block;
   padding: .2rem .75rem;
   border: none;
@@ -21,5 +21,13 @@ const model = defineModel();
   font: 1.1rem variables.$font-body;
   background: variables.$background-color;
   color: variables.$text-color;
+
+  @include mixins.breakpoint(xs){
+    width: 18rem;
+  }
+
+  @include mixins.breakpoint(xxl){
+    width: v-bind('props.width');
+  }
 }
 </style>

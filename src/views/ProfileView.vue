@@ -250,6 +250,13 @@ const onSelectEmoji = (e) => {
           top: 2.2rem;
         }
       }
+      @include mixins.breakpoint(xs) {
+        &-date {
+          &-picker {
+            left: -200%;
+          }
+        }
+      }
     }
 
     &-button {
