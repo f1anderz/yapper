@@ -129,7 +129,7 @@ exports.users_auth = (req, res) => {
                     google: req.body.googleId
                 });
                 const token = jwt.sign(
-                    {_id: user._id, login: user.login, name: user.name},
+                    {_id: newUser._id, login: newUser.login, name: newUser.name},
                     process.env.JWT_KEY,
                     {
                         expiresIn: '1y'
@@ -176,7 +176,7 @@ exports.users_auth = (req, res) => {
                             gitHub: req.body.gitHubId
                         });
                         const token = jwt.sign(
-                            {_id: user._id, login: user.login, name: user.name},
+                            {_id: newUser._id, login: newUser.login, name: newUser.name},
                             process.env.JWT_KEY,
                             {
                                 expiresIn: '1y'
