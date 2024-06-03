@@ -56,3 +56,35 @@ exports.get_stats = async (req, res) => {
         {name: 'Most likes on yap', value: mostLikes}
     ]);
 };
+
+exports.get_user_stats = async (req, res) => {
+    const totalYaps = await Yap.find({author: req.params.id}).exec().then(result => {
+        return result.length;
+    }).catch(err => {
+        return res.status(500).json(err);
+    });
+    const availableYaps = await Yap.find({author: req.params.id}).exec().then(result => {
+        result = result.filter(y => {
+            return y.deathTime !== null && y.deathTime > new Date() || y.deathTime === null;
+        });
+        return result.length;
+    }).catch(err => {
+        return res.status(500).json(err);
+    });
+    const mostLikes = await Yap.find({author: req.params.id}).exec().then(result => {
+        let likes = 0;
+        result.forEach(yap => {
+            if (yap.likes > likes) {
+                likes = yap.likes;
+            }
+        });
+        return likes;
+    }).catch(err => {
+        return res.status(500).json(err);
+    });
+    res.status(200).json([
+        {name: 'Total yaps', value: totalYaps},
+        {name: 'Available Yaps', value: availableYaps},
+        {name: 'Most likes', value: mostLikes}
+    ]);
+};

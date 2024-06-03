@@ -116,7 +116,17 @@ exports.create_yap = (req, res) => {
 };
 
 exports.modify_yap = (req, res) => {
-
+    Yap.updateOne({_id: req.params.id}, {
+        $set: {
+            body: req.body.body, deathTime: req.body.deathTime
+        }
+    }).exec().then(result => {
+        res.status(200).json(result);
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
 };
 
 exports.like_yap = (req, res) => {
