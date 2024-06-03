@@ -51,7 +51,7 @@ exports.users_register = (req, res) => {
                         name: req.body.name
                     });
                     const token = jwt.sign(
-                        {_id: user._id, login: user.login, nickname: user.nickname},
+                        {_id: user._id, login: user.login, name: user.name},
                         process.env.JWT_KEY,
                         {
                             expiresIn: '1y'
@@ -81,7 +81,7 @@ exports.users_login = (req, res) => {
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result) {
                     const token = jwt.sign(
-                        {_id: user._id, login: user.login, nickname: user.nickname},
+                        {_id: user._id, login: user.login, name: user.name},
                         process.env.JWT_KEY,
                         {
                             expiresIn: '1y'
@@ -113,7 +113,7 @@ exports.users_auth = (req, res) => {
         User.findOne({google: req.body.googleId.toString()}).exec().then(user => {
             if (user) {
                 const token = jwt.sign(
-                    {_id: user._id, login: user.login, nickname: user.nickname},
+                    {_id: user._id, login: user.login, name: user.name},
                     process.env.JWT_KEY,
                     {
                         expiresIn: '1y'
@@ -129,7 +129,7 @@ exports.users_auth = (req, res) => {
                     google: req.body.googleId
                 });
                 const token = jwt.sign(
-                    {_id: user._id, login: user.login, nickname: user.nickname},
+                    {_id: user._id, login: user.login, name: user.name},
                     process.env.JWT_KEY,
                     {
                         expiresIn: '1y'
@@ -154,7 +154,7 @@ exports.users_auth = (req, res) => {
         User.findOne({gitHub: req.body.gitHubId}).exec().then(user => {
             if (user) {
                 const token = jwt.sign(
-                    {_id: user._id, login: user.login, nickname: user.nickname},
+                    {_id: user._id, login: user.login, name: user.name},
                     process.env.JWT_KEY,
                     {
                         expiresIn: '1y'
@@ -176,7 +176,7 @@ exports.users_auth = (req, res) => {
                             gitHub: req.body.gitHubId
                         });
                         const token = jwt.sign(
-                            {_id: user._id, login: user.login, nickname: user.nickname},
+                            {_id: user._id, login: user.login, name: user.name},
                             process.env.JWT_KEY,
                             {
                                 expiresIn: '1y'
