@@ -83,8 +83,10 @@ getData();
 
 const handleLogout = async () => {
   cookies.remove('user');
+  cookies.remove('token');
   userStore.user = {_id: null};
-  await router.push('/');
+  userStore.token = null;
+  await router.push('/auth');
 };
 
 const handleLikeClick = (e) => {

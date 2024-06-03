@@ -71,6 +71,11 @@ const setUser = (user) => {
   userStore.user = user;
 };
 
+const setToken = (token) => {
+  cookies.set('token', token);
+  userStore.token = token;
+};
+
 const handleAuthClick = () => {
   if (login.value.length > 0 && password.value.length > 0) {
     if (mode.value) {
@@ -82,6 +87,7 @@ const handleAuthClick = () => {
             login: response.data.user.login,
             name: response.data.user.name
           });
+          setToken(response.data.token);
           router.push('/');
         }
       }).catch(err => error.value = err.response.data.message);
@@ -95,6 +101,7 @@ const handleAuthClick = () => {
               login: response.data.user.login,
               name: response.data.user.name
             });
+            setToken(response.data.token);
             router.push('/');
           }
         }).catch(err => error.value = err.response.data.message);
@@ -113,7 +120,7 @@ const handleGitHubClick = () => {
 
 const handleGoogleLogin = (e) => {
   const userInfo = decodeCredential(e.credential);
-  login.value = userInfo.name.replace(/ /g, '.').toLowerCase()
+  login.value = userInfo.name.replace(/ /g, '.').toLowerCase();
   userAPI.google_auth({
     name: userInfo.name,
     login: login.value,
@@ -126,13 +133,13 @@ const handleGoogleLogin = (e) => {
         login: response.data.user.login,
         name: response.data.user.name
       });
+      setToken(response.data.token);
       router.push('/');
     }
   }).catch(err => error.value = err.response.data.message);
 };
 
 watch(userData, () => {
-  console.log(userData);
   userAPI.github_auth({
     name: userData.value.name,
     login: userData.value.login,
@@ -145,6 +152,7 @@ watch(userData, () => {
         login: response.data.user.login,
         name: response.data.user.name
       });
+      setToken(response.data.token);
       router.push('/');
     }
   }).catch(err => console.log(err));
@@ -174,11 +182,11 @@ watch(userData, () => {
     padding: 2rem 3rem;
     border-radius: 1rem;
 
-    @include mixins.breakpoint(xs){
+    @include mixins.breakpoint(xs) {
       padding: .75rem 1.5rem;
     }
 
-    @include mixins.breakpoint(s){
+    @include mixins.breakpoint(s) {
       padding: .75rem 1.5rem;
     }
 
@@ -231,7 +239,7 @@ watch(userData, () => {
         flex-direction: row;
         gap: 1rem;
 
-        @include mixins.breakpoint(xs){
+        @include mixins.breakpoint(xs) {
           flex-direction: column;
           gap: .5rem;
         }
@@ -247,7 +255,7 @@ watch(userData, () => {
           background: #ffffff;
           border: .01rem solid #dddddd;
 
-          @include mixins.breakpoint(xs){
+          @include mixins.breakpoint(xs) {
             padding: .55rem .5rem;
           }
 
@@ -294,6 +302,5 @@ watch(userData, () => {
       color: variables.$error-color;
     }
   }
-
 }
 </style>

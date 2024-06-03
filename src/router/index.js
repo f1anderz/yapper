@@ -24,8 +24,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const userStore = useUserStore();
     const cookies = inject('$cookies');
-    if (cookies.isKey('user')) {
+    if (cookies.isKey('user') && cookies.isKey('token')) {
         userStore.user = cookies.get('user');
+        userStore.token = cookies.get('token');
     }
     if (to.name !== 'Authentication' && !userStore.isAuthenticated) next({name: 'Authentication'}); else next();
 });

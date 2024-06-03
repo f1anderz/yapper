@@ -4,7 +4,7 @@
     <div class="yapper-home-random">
       <yap-card v-if="yap._id" :yap="yap" @like-click="handleLikeClick"/>
       <div v-else class="yapper-home-random-loading">{{ loadingRandom }}</div>
-      <yap-button class="yapper-home-random-button" @click="handleGetClick">Get new yap</yap-button>
+      <yap-button class="yapper-home-random-button" @click="handleGetClick">Get random yap</yap-button>
     </div>
     <div class="yapper-home-create">
       <yap-create @yapped="handleYapClick"/>

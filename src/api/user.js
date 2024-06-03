@@ -1,12 +1,14 @@
 import axios from 'axios';
+import {useUserStore} from '@/stores/user.js';
 
 const base_url = 'https://www.yapper.space:3000/users';
 
 export default {
     async get_users() {
-        return await axios.get(base_url);
+        const userStore = useUserStore();
+        const authorization = `Bearer ${userStore.token}`;
+        return await axios.get(base_url, {headers: {'Authorization': authorization}});
     }, async login(loginData) {
-
         return await axios.post(base_url + '/login', {
             login: loginData.login,
             password: loginData.password

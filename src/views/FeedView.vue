@@ -4,6 +4,12 @@
       <div class="yapper-feed-dashboard-title text-gradient">Statistics:</div>
       <yap-stats-list v-if="stats !== null" :list="stats"/>
     </div>
+    <div class="yapper-feed-most-liked">
+      <div class="yapper-feed-most-liked-title text-gradient">Best yap</div>
+      <div class="yapper-feed-most-liked-card">
+        <yap-card v-if="mostLiked !== null" :yap="mostLiked" @like-click="handleLikeClick"/>
+      </div>
+    </div>
     <div class="yapper-feed-yaps">
       <div class="yapper-feed-yaps-title text-gradient">Recent yaps</div>
       <div class="yapper-feed-yaps-list">
@@ -20,14 +26,17 @@ import {ref} from 'vue';
 import YapStatsList from '@/components/YapStatsList.vue';
 import {useUserStore} from '@/stores/user.js';
 import YapList from '@/components/YapList.vue';
+import YapCard from '@/components/YapCard.vue';
 
 const userStore = useUserStore();
 
 const stats = ref(null);
 const yaps = ref(null);
+const mostLiked = ref(null);
 
 const getYaps = () => {
   yapAPI.get_yaps().then(response => {
+    mostLiked.value = response.data.shift();
     yaps.value = response.data;
   }).catch(err => console.log(err));
 };
@@ -62,19 +71,47 @@ const handleLikeClick = (e) => {
   align-items: flex-start;
   gap: 2rem;
 
+  &-most-liked {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: .5rem;
+    border-bottom: .01rem solid variables.$accent-color;
+
+    @include mixins.breakpoint(l) {
+      width: 76%;
+    }
+
+    @include mixins.breakpoint(xl) {
+      width: 78%;
+    }
+
+    &-title {
+      padding-left: 3rem;
+      font: 1.3rem variables.$font-header
+    }
+
+    &-card {
+      width: 100%;
+      padding-left: 2.5rem;
+    }
+  }
+
   &-yaps {
     width: 95%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: .75rem;
+    gap: .5rem;
 
-    @include mixins.breakpoint(l){
+    @include mixins.breakpoint(l) {
       width: 80%;
     }
 
-    @include mixins.breakpoint(xl){
+    @include mixins.breakpoint(xl) {
       width: 80%;
     }
 
@@ -112,29 +149,29 @@ const handleLikeClick = (e) => {
     color: variables.$text-color;
     box-shadow: -1px 0px 23px 0px rgba(47, 47, 47, 0.25);
 
-    @include mixins.breakpoint(xs){
+    @include mixins.breakpoint(xs) {
       position: relative;
       left: 0;
       width: 100%;
     }
 
-    @include mixins.breakpoint(s){
+    @include mixins.breakpoint(s) {
       position: relative;
       left: 0;
       margin-left: 5%;
     }
 
-    @include mixins.breakpoint(m){
+    @include mixins.breakpoint(m) {
       position: relative;
       left: 0;
       margin-left: 5%;
     }
 
-    @include mixins.breakpoint(l){
+    @include mixins.breakpoint(l) {
       left: 78%;
     }
 
-    @include mixins.breakpoint(xl){
+    @include mixins.breakpoint(xl) {
       left: 80%;
     }
 
