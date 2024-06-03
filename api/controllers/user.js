@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 
 exports.get_users = (req, res) => {
     User.find({}).exec().then(users => {
@@ -49,8 +50,16 @@ exports.users_register = (req, res) => {
                         password: hash,
                         name: req.body.name
                     });
+                    const token = jwt.sign(
+                        {_id: user._id, login: user.login, nickname: user.nickname},
+                        process.env.JWT_KEY,
+                        {
+                            expiresIn: '1y'
+                        });
                     user.save().then(result => {
-                        res.status(201).json({status: true, user: result});
+                        res.status(201).json({
+                            status: true, user: result, token: token
+                        });
                     }).catch(err => {
                         res.status(500).json({
                             error: err
@@ -71,8 +80,14 @@ exports.users_login = (req, res) => {
         if (user) {
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result) {
+                    const token = jwt.sign(
+                        {_id: user._id, login: user.login, nickname: user.nickname},
+                        process.env.JWT_KEY,
+                        {
+                            expiresIn: '1y'
+                        });
                     res.status(200).json({
-                        status: true, user: user
+                        status: true, user: user, token: token
                     });
                 } else {
                     res.status(401).json({
@@ -97,8 +112,14 @@ exports.users_auth = (req, res) => {
     if (req.body.googleId) {
         User.findOne({google: req.body.googleId.toString()}).exec().then(user => {
             if (user) {
+                const token = jwt.sign(
+                    {_id: user._id, login: user.login, nickname: user.nickname},
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: '1y'
+                    });
                 res.status(200).json({
-                    status: true, user: user
+                    status: true, user: user, token: token
                 });
             } else {
                 const newUser = User({
@@ -107,9 +128,15 @@ exports.users_auth = (req, res) => {
                     login: req.body.login,
                     google: req.body.googleId
                 });
+                const token = jwt.sign(
+                    {_id: user._id, login: user.login, nickname: user.nickname},
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: '1y'
+                    });
                 newUser.save().then(newUser => {
                     res.status(201).json({
-                        status: true, user: newUser
+                        status: true, user: newUser, token: token
                     });
                 }).catch(err => {
                     console.log(err);
@@ -126,8 +153,14 @@ exports.users_auth = (req, res) => {
     } else if (req.body.gitHubId) {
         User.findOne({gitHub: req.body.gitHubId}).exec().then(user => {
             if (user) {
+                const token = jwt.sign(
+                    {_id: user._id, login: user.login, nickname: user.nickname},
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: '1y'
+                    });
                 res.status(200).json({
-                    status: true, user: user
+                    status: true, user: user, token: token
                 });
             } else {
                 User.findOne({name: req.body.name}).exec().then(result => {
@@ -142,9 +175,15 @@ exports.users_auth = (req, res) => {
                             login: req.body.login,
                             gitHub: req.body.gitHubId
                         });
+                        const token = jwt.sign(
+                            {_id: user._id, login: user.login, nickname: user.nickname},
+                            process.env.JWT_KEY,
+                            {
+                                expiresIn: '1y'
+                            });
                         newUser.save().then(newUser => {
                             res.status(201).json({
-                                status: true, user: newUser
+                                status: true, user: newUser, token: token
                             });
                         }).catch(err => {
                             res.status(500).json({
