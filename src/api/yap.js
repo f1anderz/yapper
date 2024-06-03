@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const base_url = 'http://localhost:3000/yaps';
+const base_url = 'https://www.yapper.space:3000/yaps';
 
 export default {
     async get_yaps() {

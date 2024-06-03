@@ -26,12 +26,31 @@ const userStore = useUserStore();
   background: variables.$secondary-background-color;
   box-shadow: 0 .1rem .8rem 0 rgba(47, 47, 47, .3);
 
-  @include mixins.breakpoint(xs){
+  @include mixins.breakpoint(xs) {
     padding: 1rem 5%;
+  }
+  @include mixins.breakpoint(s) {
+    padding: 1rem 5%;
+  }
+
+  @include mixins.breakpoint(m) {
+    padding: 1rem 10%;
+  }
+
+  @include mixins.breakpoint(l){
+    padding: 1rem 15%;
+  }
+
+  @include mixins.breakpoint(xl){
+    padding: 1rem 12%;
   }
 
   &-user {
     font: 1.2rem variables.$font-header;
+
+    @include mixins.breakpoint(xs) {
+      font-size: 1rem;
+    }
   }
 }
 </style>

@@ -70,6 +70,14 @@ const handleLikeClick = (e) => {
     align-items: flex-start;
     gap: .75rem;
 
+    @include mixins.breakpoint(l){
+      width: 80%;
+    }
+
+    @include mixins.breakpoint(xl){
+      width: 80%;
+    }
+
     &-title {
       padding-left: 3rem;
       font: 1.3rem variables.$font-header
@@ -108,6 +116,26 @@ const handleLikeClick = (e) => {
       position: relative;
       left: 0;
       width: 100%;
+    }
+
+    @include mixins.breakpoint(s){
+      position: relative;
+      left: 0;
+      margin-left: 5%;
+    }
+
+    @include mixins.breakpoint(m){
+      position: relative;
+      left: 0;
+      margin-left: 5%;
+    }
+
+    @include mixins.breakpoint(l){
+      left: 78%;
+    }
+
+    @include mixins.breakpoint(xl){
+      left: 80%;
     }
 
     &-title {

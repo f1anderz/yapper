@@ -23,6 +23,22 @@ main {
     padding: 0 7%;
   }
 
+  @include breakpoint(s){
+    padding: 0 5%;
+  }
+
+  @include breakpoint(m){
+    padding: 0 5%;
+  }
+
+  @include breakpoint(l){
+    padding: 0 15%;
+  }
+
+  @include breakpoint(xl){
+    padding: 0 15%;
+  }
+
   @include breakpoint(xxl) {
     padding: 0 27%;
   }

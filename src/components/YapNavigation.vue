@@ -27,6 +27,10 @@
     font-family: variables.$font-body;
     color: variables.$text-color;
 
+    @include mixins.breakpoint(xs){
+      font-size: 1rem;
+    }
+
     @include mixins.breakpoint(xxl) {
       &:hover {
         cursor: pointer;

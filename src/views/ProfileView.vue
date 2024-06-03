@@ -153,6 +153,11 @@ const onSelectEmoji = (e) => {
   gap: 1rem;
   padding-bottom: 2rem;
 
+  @include mixins.breakpoint(m) {
+    width: 90%;
+    margin: 0 auto;
+  }
+
   &-yaps {
     width: 100%;
     display: flex;
@@ -250,6 +255,7 @@ const onSelectEmoji = (e) => {
           top: 2.2rem;
         }
       }
+
       @include mixins.breakpoint(xs) {
         &-date {
           &-picker {

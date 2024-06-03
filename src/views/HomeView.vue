@@ -101,6 +101,7 @@ const handleYapClick = () => {
 
 <style scoped lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .yapper-home {
   width: 100%;
@@ -142,6 +143,10 @@ const handleYapClick = () => {
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+
+    @include mixins.breakpoint(m) {
+      min-height: 62vh;
+    }
 
     &::-webkit-scrollbar {
       display: none;

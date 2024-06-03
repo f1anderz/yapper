@@ -32,6 +32,22 @@
     padding: 1rem 5%;
   }
 
+  @include mixins.breakpoint(s){
+    padding: 1rem 5%;
+  }
+
+  @include mixins.breakpoint(m){
+    padding: 1rem 12%;
+  }
+
+  @include mixins.breakpoint(l){
+    padding: 1rem 17%;
+  }
+
+  @include mixins.breakpoint(xl){
+    padding: 1rem 12%;
+  }
+
   &-copyright, &-author {
     font-size: 1.1rem;
   }

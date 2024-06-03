@@ -161,6 +161,7 @@ watch(userData, () => {
   flex-direction: column;
   justify-content: flex-start;
   padding-top: 20vh;
+  padding-bottom: 20vh;
   min-height: 95vh;
 
   &-form {
@@ -174,6 +175,10 @@ watch(userData, () => {
     border-radius: 1rem;
 
     @include mixins.breakpoint(xs){
+      padding: .75rem 1.5rem;
+    }
+
+    @include mixins.breakpoint(s){
       padding: .75rem 1.5rem;
     }
 
